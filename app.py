@@ -155,37 +155,42 @@ def api_show():
     carbon_rank = list(db.user.find({}, {'_id': False}).sort('carbon_count', -1))
     etc_rank = list(db.user.find({}, {'_id': False}).sort('etc_count', -1))
 
+    # coffee energy carbon drink etc
+    my_rank = [0 for i in range(5)]
+
     for i in range(len(coffee_rank)):
         for k, v in coffee_rank[i].items():
             if v == userinfo['id']:
-                print(i + 1)
+                my_rank[0] = i + 1
 
     for i in range(len(energy_rank)):
         for k, v in energy_rank[i].items():
             if v == userinfo['id']:
-                print(i + 1)
-
-    for i in range(len(drink_rank)):
-        for k, v in drink_rank[i].items():
-            if v == userinfo['id']:
-                print(i + 1)
+                my_rank[1] = i + 1
 
     for i in range(len(carbon_rank)):
         for k, v in carbon_rank[i].items():
             if v == userinfo['id']:
-                print(i + 1)
+                my_rank[2] = i + 1
+
+    for i in range(len(drink_rank)):
+        for k, v in drink_rank[i].items():
+            if v == userinfo['id']:
+                my_rank[3] = i + 1
 
     for i in range(len(etc_rank)):
         for k, v in etc_rank[i].items():
             if v == userinfo['id']:
-                print(i + 1)
+                my_rank[4] = i + 1
+
     return jsonify({
                         'info': info_list,
                         'coffee': coffee_rank,
                         'energy': energy_rank,
                         'drink': drink_rank,
                         'carbon': carbon_rank,
-                        'etc': etc_rank
+                        'etc': etc_rank,
+                        'ranking': my_rank
                     })
 
 
