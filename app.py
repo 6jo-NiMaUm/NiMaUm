@@ -34,7 +34,6 @@ def test():
     }
 
     db.test.insert_one(doc)
-
     return jsonify({'msg': '응원댓글 달기 완료!'})
 
 ##############################
@@ -42,11 +41,8 @@ def test():
 def listen():
     def respond_to_client():
 
-        stream = db.watch(full_document="updateLookup", full_document_before_change="whenAvailable")
+        stream = db.test.watch(full_document="updateLookup", full_document_before_change="whenAvailable")
         for docu in stream:
-            print(docu)
-
-            # db.test.find_one({'_id': docu['id']},)
 
             _data = json.dumps({
                 "nick": docu['fullDocument']['comment'],
