@@ -10,7 +10,6 @@
           $('#massage_box').hide();
       });
 
-
     function save_comment(){
       let te = $('#comment').val()
       let star = $('#star').val()
@@ -25,6 +24,7 @@
     }
   </script>
     <style>
+
         body {
             height: 3000px;
         }
@@ -45,15 +45,17 @@
         div.fixed > .message {
             text-align: center;
         }
+
     </style>
 </head>
 <body>
   <h1>APP</h1>
+
+  <!-- -->
   <div class="fixed" id="massage_box">
       <div class="message">
       </div>
   </div>
-
   <script>
     var eventSource = new EventSource("/listen")
 
@@ -64,13 +66,16 @@
     eventSource.addEventListener("online", function(e) {
       data = JSON.parse(e.data)
         $('#massage_box').show();
-        document.querySelector("#massage_box").innerText = data.nick + " 님이 " + data.coffee + "를 마셨습니다."
+        document.querySelector("#massage_box").innerText = data.nick + " 님이 " + data.coffee + " , " + data.energy + " , " + data.drink + " , " + data.carbon + " , " + data.etc + "를 마셨습니다."
 
         setTimeout(function(){
             $('#massage_box').hide();
         }, 2000) // 2초후 숨김
     }, true)
   </script>
+  <!-- -->
+
+
   <textarea id="comment">
   </textarea>
   <select class="form-select" id="star">

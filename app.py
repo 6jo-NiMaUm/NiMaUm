@@ -46,11 +46,11 @@ def listen():
 
             _data = json.dumps({
                 "nick": docu['fullDocument']['comment'],
-                "coffee": docu['fullDocument']['star']
-                # "energy": docu['fullDocument']['energy_count'],
-                # "drink": docu['fullDocument']['drink_count'],
-                # "carbon": docu['fullDocument']['carbon_count'],
-                # "etc": docu['fullDocument']['etc_count']
+                "coffee": docu['fullDocument']['star'],
+                "energy": docu['fullDocument']['energy_count'],
+                "drink": docu['fullDocument']['drink_count'],
+                "carbon": docu['fullDocument']['carbon_count'],
+                "etc": docu['fullDocument']['etc_count']
             })
             yield f"id: 1\ndata: {_data}\nevent: online\n\n"
 
