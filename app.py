@@ -54,8 +54,8 @@ def index():
 
 @app.route('/api/register', methods=['POST'])
 def api_register():
-    idreg = re.compile("^[0-9a-zA-Z가-힣]{2,20}$")
-    pwreg = re.compile("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
+    idreg = re.compile("^[0-9a-zA-Z가-힣]{5,20}$")
+    pwreg = re.compile("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$")
     nickreg = re.compile("^[0-9a-zA-Z가-힣]{2,10}$")
 
     id_receive = request.form['id_give']
@@ -101,9 +101,7 @@ def api_login():
             'id': id_receive,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
         }
-
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-
         return jsonify({'result': 'success', 'token': token})
     else:
         return jsonify({'result': 'fail', 'msg': '아이디 또는 비밀번호가 일치하지 않습니다.'})
@@ -114,6 +112,7 @@ def api_show():
     token_receive = request.cookies.get('mytoken')
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
     userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
+    print(userinfo)
 
     info_list = list(db.user.find({'id': userinfo['id']}, {'_id': False}).sort('coffee_count', -1))
 

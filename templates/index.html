@@ -163,8 +163,6 @@
     .mylist {
     }
 </style>
-
-
 </head>
 <body>
 
@@ -192,11 +190,17 @@
             <a href="#" class="navbar-brand d-flex align-items-center">
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">닉네임</span>
+<!--<<<<<<< HEAD-->
                     <span class="input-group-text">{{ nickname }}</span>
-<!--                    <text>{{ nickname }}</text>-->
 
                 </div>
                 <button type="button" onclick="logout()" class="btn btn-light">로그아웃</button>
+<!--=======-->
+<!--                    <input type="text" class="form-control" placeholder="" aria-label="Username"-->
+<!--                           aria-describedby="addon-wrapping">-->
+<!--                </div>-->
+<!--                <button onclick="logout()" type="button" class="btn btn-light">로그아웃</button>-->
+<!--&gt;>>>>>> c23267a21598301bd39ce0da409dfca339df85e8-->
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
                     aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
@@ -207,8 +211,6 @@
 </header>
 
 <main>
-<!--    <h5 class="subtitle">나의 닉네임은: {{ nickname }}</h5>-->
-<!--    <button class="button is-danger" onclick="logout()">로그아웃하기</button>-->
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
