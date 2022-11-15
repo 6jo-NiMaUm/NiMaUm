@@ -6,6 +6,10 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <title>APP</title>
   <script>
+      $(document).ready(function () {
+          $('#massage_box').hide();
+      });
+
     function save_comment(){
       let te = $('#comment').val()
       let star = $('#star').val()
@@ -18,10 +22,6 @@
           }
       })
     }
-
-    setTimeout(function(){
-        $('#massage_box').hide();
-    }, 3000)
   </script>
     <style>
         div.fixed {
