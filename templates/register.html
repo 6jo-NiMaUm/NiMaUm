@@ -5,10 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">#}
+    {#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">#}
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
@@ -44,12 +45,13 @@
            div 는 텍스트 바이너리가 아니라서 불가능 했던걸로 추정
            $('#result').innerHTML("확인")
 
+           아래의 정규식에서 new 가 왜 안돼는지 관련
            정규식 참고 링크 https://hamait.tistory.com/342
                           https://java119.tistory.com/71 이 블로그의 비밀번호 정규식 적용이다
         #}
-        var id_reg = new RegExp('^[0-9a-zA-Z가-힣]{2,20}$')
+        var id_reg = new RegExp('^[0-9a-zA-Z가-힣]{5,20}$')
         var nick_reg = new RegExp('^[0-9a-zA-Z가-힣]{2,10}$')
-        var pw_reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+        var pw_reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$/
 
         function closeid() {
             let newValue
@@ -83,9 +85,9 @@
                     target_tag.setAttribute('class', 'form-control two')
                 }
 
-{#                if ($('#usernick').classList.length === 3) {
-                    $('#rego').attr('disabled', false)
-                }#}
+                {#                if ($('#usernick').classList.length === 3) {
+                                    $('#rego').attr('disabled', false)
+                                }#}
             });
         }
 
@@ -104,14 +106,18 @@
                     target_tag.setAttribute('class', 'form-control three')
                 }
 
-{#                if ($('#userpw').classList.length === 3) {
-                    $('#rego').attr('disabled', false)
-                }#}
+                {#                if ($('#userpw').classList.length === 3) {
+                                    $('#rego').attr('disabled', false)
+                                }#}
             });
         }
 
     </script>
     <style>
+        * {
+            font-family: 'Poor Story', cursive;
+        }
+
         .main {
             background-color: #e5e5e5;
         }
@@ -122,7 +128,7 @@
             max-width: 700px;
             height: 100%;
 
-            border-radius: 10px;
+            border-radius: 15px;
         }
 
         .main-box > .register-box {
@@ -142,12 +148,12 @@
 
         .main-box > .register-box > .mascot {
             width: 100%;
-
+            border-radius: 55px;
             padding: 40px;
         }
 
         .main-box > .register-box > .buttons > button {
-            margin: 10px 10px 20px 10px;
+            margin: 10px 10px 40px 10px;
         }
 
         @media screen and (max-width: 800px) {
@@ -179,13 +185,13 @@
 
         <img class="mascot" src="/static/mascot.jpg" alt="6조 마스코트">
 
-        <div class="form-floating mb-3">
+        <div class="form-floating mb-3" style="margin-bottom: 0">
             <input type="text" class="form-control" id="userid" placeholder="name@example.com"
                    onkeyup="closeid()">
             <label for="floatingInput">아이디</label>
         </div>
-        <div id="result1" style="display: none; margin: 0 0 10px 0; border-bottom: solid 2px red;">
-            양식에 맞게 다시 입력해주세요.
+        <div id="result1" style="display: none; margin: 0 0 15px; color: #ef0000; font-weight: 600; font-size: 16px;">
+            5~20자의 영문 대 소문자, 숫자만 사용 가능합니다.
         </div>
 
         <div class="form-floating mb-3">
@@ -193,8 +199,8 @@
                    onkeyup="closenick()">
             <label class=butt"" for="floatingInput">닉네임</label>
         </div>
-        <div id="result2" style="display: none; margin: 0 0 10px 0; border-bottom: solid 2px red;">
-            양식에 맞게 다시 입력해주세요.
+        <div id="result2" style="display: none; margin: 0 0 15px; color: #ef0000; font-weight: 600; font-size: 16px;">
+            2~10자 영문 대 소문자, 숫자, 한글만 사용하세요.
         </div>
 
         <div class="form-floating">
@@ -202,13 +208,14 @@
                    onkeyup="closepw()">
             <label class="butt" for="floatingPassword">비밀번호</label>
         </div>
-        <div id="result3" style="display: none; margin: 0 0 10px 0; border-bottom: solid 2px red;">
-            양식에 맞게 다시 입력해주세요.
+        <div id="result3"
+             style="display: none; margin: 1rem 0 15px; color: #ef0000; font-weight: 600; font-size: 16px;">
+            8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.
         </div>
 
         <div class="buttons">
-            <button onclick="location.href='http://localhost:5000/login'" class="btn btn-outline-primary">취소</button>
-            <button id="rego" onclick="register()" class="btn btn-outline-primary">회원가입</button>
+            <button onclick="location.href='http://localhost:5000/login'" class="btn btn-outline-info">취소</button>
+            <button id="rego" onclick="register()" class="btn btn-outline-info">회원가입</button>
         </div>
     </div>
 </div>
