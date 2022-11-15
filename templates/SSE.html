@@ -6,6 +6,13 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <title>APP</title>
   <script>
+      $(document).ready(function () {
+          $('#massage_box').show();
+          setTimeout(function(){
+              $('#massage_box').hide();
+          }, 3000)
+      });
+
     function save_comment(){
       let te = $('#comment').val()
       let star = $('#star').val()
@@ -18,12 +25,41 @@
           }
       })
     }
+
+    setTimeout(function(){
+        $('#massage_box').hide();
+    }, 3000)
   </script>
+    <style>
+        div.fixed {
+            background-color: darkgrey;
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100px;
+            text-align: center;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        div.fixed > .message {
+            text-align: center;
+            width: 500px;
+        }
+    </style>
 </head>
 <body>
   <h1>APP</h1>
-  <div id="update"></div>
-  <div id="update1"></div>
+  <div class="fixed" id="massage_box">
+      <div class="message">
+           <div id="update"></div>
+           <div id="update1"></div>
+      </div>
+  </div>
+
   <script>
     var eventSource = new EventSource("/listen")
 
@@ -33,8 +69,13 @@
 
     eventSource.addEventListener("online", function(e) {
       data = JSON.parse(e.data)
-      document.querySelector("#update").innerText = data.update
+        $('#massage_box').show();
+        document.querySelector("#update").innerText = data.update
         document.querySelector("#update1").innerText= parseInt(data.star)
+
+        setTimeout(function(){
+            $('#massage_box').hide();
+        }, 3000) // 3초후 숨김
     }, true)
   </script>
   <textarea id="comment">
