@@ -45,6 +45,9 @@
                         let rows_carbon = response['carbon'];
                         let rows_drink  = response['drink'];
                         let rows_etc    = response['etc'];
+                        let rows_myrank = response['ranking'];
+
+                        console.log(rows_myrank);
 
                         for(let i = 0; i < rows_info.length; i++){
 
@@ -93,6 +96,13 @@
                         $('#etc_4th').text('4. ' + rows_etc[3]['id']);
                         $('#etc_5th').text('5. ' + rows_etc[4]['id']);
 
+                        $('#coffee_myranking').text('나의 랭킹: ' + rows_myrank[0]);
+                        $('#energy_myranking').text('나의 랭킹: ' + rows_myrank[1]);
+                        $('#carbon_myranking').text('나의 랭킹: ' + rows_myrank[2]);
+                        $('#drink_myranking').text('나의 랭킹: ' + rows_myrank[3]);
+                        $('#etc_myranking').text('나의 랭킹: ' + rows_myrank[4]);
+
+
 
 
 
@@ -104,7 +114,7 @@
             function count(id, dir){
                 dir = dir.split('_')[0];
 
-                console.log(dir, id)
+
                 if(dir == 'up'){
                     cnt = parseInt($('#' + id).text()) + 1;
                 }
@@ -116,7 +126,7 @@
                     cnt = 0;
                 }
 
-                console.log(cnt);
+
                 $('#' + id).text(cnt);
             }
 
@@ -277,12 +287,12 @@
                         <div class="card-body">
                             <h5 class="card-title">커피</h5>
                             <p class="card-text">coffe rank</p>
-                            <text>나의 순위는:</text>
-                            <p class="mycomment" id ="coffee_1st">1</p>
-                            <p class="mycomment" id ="coffee_2nd">2</p>
-                            <p class="mycomment" id ="coffee_3rd">3</p>
-                            <p class="mycomment" id ="coffee_4th">4</p>
-                            <p class="mycomment" id ="coffee_5th">5</p>
+                            <text id = "coffee_myranking"></text>
+                            <p class="mycomment" id ="coffee_1st"></p>
+                            <p class="mycomment" id ="coffee_2nd"></p>
+                            <p class="mycomment" id ="coffee_3rd"></p>
+                            <p class="mycomment" id ="coffee_4th"></p>
+                            <p class="mycomment" id ="coffee_5th"></p>
                         </div>
                     </div>
                 </div>
@@ -293,7 +303,7 @@
                         <div class="card-body-coffee">
                             <h5 class="card-title">에너지 드링크</h5>
                             <p class="card-text">anergy drink rank</p>
-                            <text>나의 순위는:</text>
+                            <text id = "energy_myranking"></text>
                             <p class="mycomment" id ="energy_1st">1</p>
                             <p class="mycomment" id ="energy_2nd">2</p>
                             <p class="mycomment" id ="energy_3rd">3</p>
@@ -308,7 +318,7 @@
                         <div class="card-body">
                             <h5 class="card-title">탄산음료</h5>
                             <p class="card-text">Tansan dink rank</p>
-                            <text>나의 순위는:</text>
+                            <text id = "carbon_myranking"></text>
                             <p class="mycomment" id ="carbon_1st">1</p>
                             <p class="mycomment" id ="carbon_2nd">2</p>
                             <p class="mycomment" id ="carbon_3rd">3</p>
@@ -324,7 +334,7 @@
                         <div class="card-body">
                             <h5 class="card-title">술</h5>
                             <p class="card-text">drunk rank</p>
-                            <text>나의 순위는:</text>
+                            <text id = "drink_myranking"></text>
                            <p class="mycomment" id ="drink_1st">1</p>
                             <p class="mycomment" id ="drink_2nd">2</p>
                             <p class="mycomment" id ="drink_3rd">3</p>
@@ -341,7 +351,7 @@
                         <div class="card-body">
                             <h5 class="card-title">기타</h5>
                             <p class="card-text">another drink rank</p>
-                            <text>나의 순위는:</text>
+                            <text id = "etc_myranking"></text>
                             <p class="mycomment" id ="etc_1st">1</p>
                             <p class="mycomment" id ="etc_2nd">2</p>
                             <p class="mycomment" id ="etc_3rd">3</p>
