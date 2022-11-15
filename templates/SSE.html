@@ -47,8 +47,6 @@
   <h1>APP</h1>
   <div class="fixed" id="massage_box">
       <div class="message">
-           <div id="update"></div>
-           <div id="update1"></div>
       </div>
   </div>
 
@@ -62,8 +60,7 @@
     eventSource.addEventListener("online", function(e) {
       data = JSON.parse(e.data)
         $('#massage_box').show();
-        document.querySelector("#update").innerText = data.update
-        document.querySelector("#update1").innerText= data.star
+        document.querySelector("#massage_box").innerText = data.nick + " 님이 " + data.coffee + "를 마셨습니다."
 
         setTimeout(function(){
             $('#massage_box').hide();

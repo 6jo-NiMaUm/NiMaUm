@@ -7,11 +7,13 @@ import json
 import time
 
 from pymongo import MongoClient
+import certifi
 
 app = Flask(__name__)
 counter = 100
 
-client = MongoClient('mongodb+srv://test:sparta@cluster0.i7caukz.mongodb.net/Cluster0?retryWrites=true&w=majority')
+client = MongoClient('mongodb+srv://test:sparta@cluster0.i7caukz.mongodb.net/Cluster0?retryWrites=true&w=majority',
+                     tlsCAFile=certifi.where())
 db = client.dbsparta
 
 
@@ -40,10 +42,20 @@ def test():
 def listen():
     def respond_to_client():
 
-        stream = db.watch(full_document="updateLookup")
+        stream = db.watch(full_document="updateLookup", full_document_before_change="whenAvailable")
         for docu in stream:
+            print(docu)
 
-            _data = json.dumps({"update": docu['fullDocument']['comment'], "star": docu['fullDocument']['star']})
+            # db.test.find_one({'_id': docu['id']},)
+
+            _data = json.dumps({
+                "nick": docu['fullDocument']['comment'],
+                "coffee": docu['fullDocument']['star']
+                # "energy": docu['fullDocument']['energy_count'],
+                # "drink": docu['fullDocument']['drink_count'],
+                # "carbon": docu['fullDocument']['carbon_count'],
+                # "etc": docu['fullDocument']['etc_count']
+            })
             yield f"id: 1\ndata: {_data}\nevent: online\n\n"
 
     return Response(respond_to_client(), mimetype='text/event-stream')
