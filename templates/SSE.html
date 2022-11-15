@@ -6,13 +6,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <title>APP</title>
   <script>
-      $(document).ready(function () {
-          $('#massage_box').show();
-          setTimeout(function(){
-              $('#massage_box').hide();
-          }, 3000)
-      });
-
     function save_comment(){
       let te = $('#comment').val()
       let star = $('#star').val()
@@ -32,7 +25,7 @@
   </script>
     <style>
         div.fixed {
-            background-color: darkgrey;
+            background-color: rgba(100, 100, 100, 0.6);
             position: fixed;
             bottom: 0;
             right: 0;
@@ -47,7 +40,6 @@
         }
         div.fixed > .message {
             text-align: center;
-            width: 500px;
         }
     </style>
 </head>
@@ -71,11 +63,11 @@
       data = JSON.parse(e.data)
         $('#massage_box').show();
         document.querySelector("#update").innerText = data.update
-        document.querySelector("#update1").innerText= parseInt(data.star)
+        document.querySelector("#update1").innerText= data.star
 
         setTimeout(function(){
             $('#massage_box').hide();
-        }, 3000) // 3초후 숨김
+        }, 2000) // 2초후 숨김
     }, true)
   </script>
   <textarea id="comment">
