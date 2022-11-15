@@ -49,14 +49,18 @@ def register():
 
 @app.route('/api/register', methods=['POST'])
 def api_register():
-    reg1 = re.compile("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$")
+    idreg = re.compile("^[0-9a-zA-Z가-힣]{2,20}$")
+    pwreg = re.compile("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
+    nickreg = re.compile("^[0-9a-zA-Z가-힣]{2,10}$")
 
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
     nickname_receive = request.form['nickname_give']
 
-    check_pw = reg1.match(pw_receive)
-    if check_pw:
+    check_id = idreg.match(id_receive)
+    check_pw = pwreg.match(pw_receive)
+    check_nick = nickreg.match(nickname_receive)
+    if check_id and check_pw and check_nick:
         pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
         db.user.insert_one({'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive})
         return jsonify({'result': 'success'})
