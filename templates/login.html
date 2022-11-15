@@ -37,13 +37,20 @@
             })
         }
     </script>
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
     <style>
+         * {
+                font-family: 'Poor Story', cursive;
+            }
         .main {
             background-color: #e5e5e5;
+            background-image: url("http://nstayimg4.speedgabia.com/arribada/main/mv01.jpg");
+
+
         }
 
         .main-box {
-            background-color: #ffffff;
+            background-color: #F7BE81;
             margin: 20px auto;
             max-width: 700px;
             height: 100%;
@@ -101,20 +108,20 @@
 <body class="main">
 <div class="main-box">
     <div class="login-box">
-        <h1 style="display: flex; justify-content: center; margin-top: 10px;">로그인</h1>
-        <img class="mascot" src="/static/mascot.jpg" alt="6조 마스코트">
+        <h1 style="display: flex; justify-content: center; margin-top: 10px;">what's your drink</h1>
+        <img class="mascot" src="https://cdn.imweb.me/upload/S20200515cfb40c92647b4/790be33eab815.png" alt="6조 마스코트">
         <div class="form-floating mb-3">
             <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"
             focus>
-            <label for="floatingInput">아아디</label>
+            <label for="floatingInput">아이디</label>
         </div>
         <div class="form-floating">
             <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">비밀번호</label>
         </div>
         <div class="buttons">
-            <button onclick="login()" class="btn btn-outline-primary">로그인</button>
-            <button onclick="location.href='http://localhost:5000/register'" class="btn btn-outline-primary">회원가입
+            <button onclick="login()" class="btn btn-warning">로그인</button>
+            <button onclick="location.href='http://localhost:5000/register'" class="btn btn-warning">회원가입
             </button>
         </div>
     </div>

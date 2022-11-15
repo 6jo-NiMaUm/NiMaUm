@@ -46,6 +46,12 @@
                 let rows_etc = response['etc'];
                 let rows_myrank = response['ranking'];
 
+                 var arr_coffee = ['#coffee_1st', '#coffee_2nd', '#coffee_3rd', '#coffee_4th', '#coffee_5th' ];
+                        var arr_energy = ['#energy_1st', '#energy_2nd', '#energy_3rd', '#energy_4th', '#energy_5th'];
+                        var arr_carbon = ['#carbon_1st', '#carbon_2nd', '#carbon_3rd', '#carbon_4th', '#carbon_5th'];
+                        var arr_drink = ['#drink_1st', '#drink_2nd', '#drink_3rd', '#drink_4th', '#drink_5th'];
+                        var arr_etc = ['#etc_1st', '#etc_2nd', '#etc_3rd', '#etc_4th', '#etc_5th'];
+
                 console.log(rows_myrank);
 
                 for (let i = 0; i < rows_info.length; i++) {
@@ -65,41 +71,25 @@
 
                 }
 
-                $('#coffee_1st').text('1. ' + rows_coffee[0]['id']);
-                $('#coffee_2nd').text('2. ' + rows_coffee[1]['id']);
-                $('#coffee_3rd').text('3. ' + rows_coffee[2]['id']);
-                $('#coffee_4th').text('4. ' + rows_coffee[3]['id']);
-                $('#coffee_5th').text('5. ' + rows_coffee[4]['id']);
+                 for(let i = 0; i < rows_coffee.length; i ++){
+                            $(arr_coffee[i]).text('1. ' + rows_coffee[i]['id']);
+                        }
 
-                $('#energy_1st').text('1. ' + rows_energy[0]['id']);
-                $('#energy_2nd').text('2. ' + rows_energy[1]['id']);
-                $('#energy_3rd').text('3. ' + rows_energy[2]['id']);
-                $('#energy_4th').text('4. ' + rows_energy[3]['id']);
-                $('#energy_5th').text('5. ' + rows_energy[4]['id']);
+                        for(let i = 0; i < rows_energy.length; i ++){
+                            $(arr_energy[i]).text('1. ' + rows_energy[i]['id']);
+                        }
 
-                $('#carbon_1st').text('1. ' + rows_carbon[0]['id']);
-                $('#carbon_2nd').text('2. ' + rows_carbon[1]['id']);
-                $('#carbon_3rd').text('3. ' + rows_carbon[2]['id']);
-                $('#carbon_4th').text('4. ' + rows_carbon[3]['id']);
-                $('#carbon_5th').text('5. ' + rows_carbon[4]['id']);
+                        for(let i = 0; i < rows_carbon.length; i ++){
+                            $(arr_carbon[i]).text('1. ' + rows_carbon[i]['id']);
+                        }
 
-                $('#drink_1st').text('1. ' + rows_drink[0]['id']);
-                $('#drink_2nd').text('2. ' + rows_drink[1]['id']);
-                $('#drink_3rd').text('3. ' + rows_drink[2]['id']);
-                $('#drink_4th').text('4. ' + rows_drink[3]['id']);
-                $('#drink_5th').text('5. ' + rows_drink[4]['id']);
+                        for(let i = 0; i < rows_drink.length; i ++){
+                            $(arr_drink[i]).text('1. ' + rows_drink[i]['id']);
+                        }
 
-                $('#etc_1st').text('1. ' + rows_etc[0]['id']);
-                $('#etc_2nd').text('2. ' + rows_etc[1]['id']);
-                $('#etc_3rd').text('3. ' + rows_etc[2]['id']);
-                $('#etc_4th').text('4. ' + rows_etc[3]['id']);
-                $('#etc_5th').text('5. ' + rows_etc[4]['id']);
-
-                $('#coffee_myranking').text('나의 랭킹: ' + rows_myrank[0]);
-                $('#energy_myranking').text('나의 랭킹: ' + rows_myrank[1]);
-                $('#carbon_myranking').text('나의 랭킹: ' + rows_myrank[2]);
-                $('#drink_myranking').text('나의 랭킹: ' + rows_myrank[3]);
-                $('#etc_myranking').text('나의 랭킹: ' + rows_myrank[4]);
+                        for(let i = 0; i < rows_etc.length; i ++){
+                            $(arr_etc[i]).text('1. ' + rows_etc[i]['id']);
+                        }
 
 
             }
@@ -202,10 +192,11 @@
             <a href="#" class="navbar-brand d-flex align-items-center">
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">닉네임</span>
-                    <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                           aria-describedby="addon-wrapping">
+                    <span class="input-group-text">{{ nickname }}</span>
+<!--                    <text>{{ nickname }}</text>-->
+
                 </div>
-                <button type="button" class="btn btn-light">로그아웃</button>
+                <button type="button" onclick="logout()" class="btn btn-light">로그아웃</button>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
                     aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
@@ -216,8 +207,8 @@
 </header>
 
 <main>
-    <h5 class="subtitle">나의 닉네임은: {{ nickname }}</h5>
-    <button class="button is-danger" onclick="logout()">로그아웃하기</button>
+<!--    <h5 class="subtitle">나의 닉네임은: {{ nickname }}</h5>-->
+<!--    <button class="button is-danger" onclick="logout()">로그아웃하기</button>-->
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
