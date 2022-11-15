@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>로그인 페이지</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    {# $.cookie is not a function 에러가 뜨는데 쿠키를 사용하기 위해서 #}
+    <script>
+        {% if msg %}
+            alert("{{ msg }}")
+        {% endif %}
+
+        function login() {
+            $.ajax({
+                type: "POST",
+                url: "/api/login",
+                data: {id_give: $('#floatingInput').val(), pw_give: $('#floatingPassword').val()},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        $.cookie('mytoken', response['token']);
+
+                        alert('로그인 완료!')
+                        window.location.href = '/'
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+            })
+        }
+    </script>
+    <style>
+        .main {
+            background-color: #e5e5e5;
+        }
+
+        .main-box {
+            background-color: #ffffff;
+            margin: 20px auto;
+            max-width: 700px;
+            height: 100%;
+
+            border-radius: 10px;
+        }
+
+        .main-box > .login-box {
+            transition: 0.3s;
+            margin: auto;
+            padding-top: 20px;
+
+            max-width: 500px;
+        }
+
+        .main-box > .login-box > .buttons {
+            display: flex;
+            justify-content: center;
+
+            margin-top: 10px;
+        }
+
+        .main-box > .login-box > .mascot {
+            width: 100%;
+
+            padding: 40px;
+        }
+
+        .main-box > .login-box > .buttons > button {
+            margin: 10px 10px 20px 10px;
+        }
+
+        @media screen and (max-width: 800px) {
+            .main-box {
+                max-width: 90%;
+            }
+
+            .main-box > .login-box {
+                max-width: 80%;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .main-box {
+                max-width: 90%;
+            }
+
+            .main-box > .login-box {
+                max-width: 80%;
+            }
+        }
+    </style>
+    <meta charset="UTF-8">
+</head>
+<body class="main">
+<div class="main-box">
+    <div class="login-box">
+        <h1 style="display: flex; justify-content: center; margin-top: 10px;">로그인</h1>
+        <img class="mascot" src="/static/mascot.jpg" alt="6조 마스코트">
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"
+            focus>
+            <label for="floatingInput">아아디</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+            <label for="floatingPassword">비밀번호</label>
+        </div>
+        <div class="buttons">
+            <button onclick="login()" class="btn btn-outline-primary">로그인</button>
+            <button onclick="location.href='http://localhost:5000/register'" class="btn btn-outline-primary">회원가입
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
