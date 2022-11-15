@@ -53,6 +53,7 @@
                 var arr_drink = ['#drink_1st', '#drink_2nd', '#drink_3rd', '#drink_4th', '#drink_5th'];
                 var arr_etc = ['#etc_1st', '#etc_2nd', '#etc_3rd', '#etc_4th', '#etc_5th'];
 
+
                 console.log(rows_myrank);
 
                 for (let i = 0; i < rows_info.length; i++) {
@@ -71,6 +72,7 @@
                 }
 
 
+
                 for(let i = 0; i < rows_coffee.length; i ++){
                     $(arr_coffee[i]).text('1. ' + rows_coffee[i]['id']);
                 }
@@ -82,7 +84,6 @@
                 for(let i = 0; i < rows_carbon.length; i ++){
                     $(arr_carbon[i]).text('1. ' + rows_carbon[i]['id']);
                 }
-
                 for(let i = 0; i < rows_drink.length; i ++){
                     $(arr_drink[i]).text('1. ' + rows_drink[i]['id']);
                 }
@@ -179,8 +180,6 @@
         text-align: center;
     }
 </style>
-
-
 </head>
 <body>
 
@@ -208,10 +207,17 @@
             <a href="#" class="navbar-brand d-flex align-items-center">
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">닉네임</span>
-                    <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                           aria-describedby="addon-wrapping">
+<!--<<<<<<< HEAD-->
+                    <span class="input-group-text">{{ nickname }}</span>
+
                 </div>
-                <button type="button" class="btn btn-light">로그아웃</button>
+                <button type="button" onclick="logout()" class="btn btn-light">로그아웃</button>
+<!--=======-->
+<!--                    <input type="text" class="form-control" placeholder="" aria-label="Username"-->
+<!--                           aria-describedby="addon-wrapping">-->
+<!--                </div>-->
+<!--                <button onclick="logout()" type="button" class="btn btn-light">로그아웃</button>-->
+<!--&gt;>>>>>> c23267a21598301bd39ce0da409dfca339df85e8-->
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
                     aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
@@ -222,8 +228,6 @@
 </header>
 
 <main>
-    <h5 class="subtitle">나의 닉네임은: {{ nickname }}</h5>
-    <button class="button is-danger" onclick="logout()">로그아웃하기</button>
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
