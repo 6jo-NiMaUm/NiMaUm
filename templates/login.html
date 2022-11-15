@@ -1,87 +1,123 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
+<head>
+    <title>로그인 페이지</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <!-- Webpage Title -->
-        <title>Hello, world!</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    {# $.cookie is not a function 에러가 뜨는데 쿠키를 사용하기 위해서여 #}
+    <script>
+        {% if msg %}
+            alert("{{ msg }}")
+        {% endif %}
 
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        function login() {
+            $.ajax({
+                type: "POST",
+                url: "/api/login",
+                data: {id_give: $('#floatingInput').val(), pw_give: $('#floatingPassword').val()},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        $.cookie('mytoken', response['token']);
 
-        <!-- Bulma CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-        <!-- JS -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-
-
-        <script>
-            {% if msg %}
-                alert("{{ msg }}")
-            {% endif %}
-            // ['쿠키'라는 개념에 대해 알아봅시다]
-            // 로그인을 구현하면, 반드시 쿠키라는 개념을 사용합니다.
-            // 페이지에 관계없이 브라우저에 임시로 저장되는 정보입니다. 키:밸류 형태(딕셔너리 형태)로 저장됩니다.
-            // 쿠키가 있기 때문에, 한번 로그인하면 네이버에서 다시 로그인할 필요가 없는 것입니다.
-            // 브라우저를 닫으면 자동 삭제되게 하거나, 일정 시간이 지나면 삭제되게 할 수 있습니다.
-            function login() {
-                $.ajax({
-                    type: "POST",
-                    url: "/api/login",
-                    data: {id_give: $('#userid').val(), pw_give: $('#userpw').val()},
-                    success: function (response) {
-                        if (response['result'] == 'success') {
-                            // 로그인이 정상적으로 되면, 토큰을 받아옵니다.
-                            // 이 토큰을 mytoken이라는 키 값으로 쿠키에 저장합니다.
-                            $.cookie('mytoken', response['token']);
-
-                            alert('로그인 완료!')
-                            window.location.href = 'index';
-                        } else {
-                            // 로그인이 안되면 에러메시지를 띄웁니다.
-                            alert(response['msg'])
-                        }
+                        alert('로그인 완료!')
+                        window.location.href = '/'
+                    } else {
+                        alert(response['msg'])
                     }
-                })
+                }
+            })
+        }
+    </script>
+    <style>
+        .main {
+            background-color: #e5e5e5;
+        }
+
+        .main-box {
+            background-color: #ffffff;
+            margin: 20px auto;
+            max-width: 700px;
+            height: 100%;
+
+            border-radius: 10px;
+        }
+
+        .main-box > .login-box {
+            transition: 0.3s;
+            margin: auto;
+            padding-top: 20px;
+
+            max-width: 500px;
+        }
+
+        .main-box > .login-box > .buttons {
+            display: flex;
+            justify-content: center;
+
+            margin-top: 10px;
+        }
+
+        .main-box > .login-box > .mascot {
+            width: 100%;
+
+            padding: 40px;
+        }
+
+        .main-box > .login-box > .buttons > button {
+            margin: 10px 10px 20px 10px;
+        }
+
+        @media screen and (max-width: 800px) {
+            .main-box {
+                max-width: 90%;
             }
 
-        </script>
+            .main-box > .login-box {
+                max-width: 80%;
+            }
+        }
 
-    </head>
-    <body>
-        <div class="section has-text-centered">
-            <h1 class="title">니마음</h1>
-            <h2 class="title">니가 마신 음료</h2>
-            <div class="container" style="width:60%">
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label" for="userid">ID</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input type="text" class="input" id="userid" aria-describedby="emailHelp"
-                                       placeholder="My ID">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label" for="userpw">PW</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input type="password" class="input" id="userpw" placeholder="My Password">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button class="button is-primary" onclick="login()">로그인</button>
-                <button class="button is-primary" onclick="window.location.href='register'" >회원가입</button>
-            </div>
+        @media screen and (max-width: 600px) {
+            .main-box {
+                max-width: 90%;
+            }
+
+            .main-box > .login-box {
+                max-width: 80%;
+            }
+        }
+    </style>
+    <meta charset="UTF-8">
+</head>
+<body class="main">
+<div class="main-box">
+    <div class="login-box">
+        <h1 style="display: flex; justify-content: center; margin-top: 10px;">로그인</h1>
+        <img class="mascot" src="/static/mascot.jpg" alt="6조 마스코트">
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"
+            focus>
+            <label for="floatingInput">아아디</label>
         </div>
-    </body>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+            <label for="floatingPassword">비밀번호</label>
+        </div>
+        <div class="buttons">
+            <button onclick="login()" class="btn btn-outline-primary">로그인</button>
+            <button onclick="location.href='http://localhost:5000/register'" class="btn btn-outline-primary">회원가입
+            </button>
+        </div>
+    </div>
+</div>
+</body>
 </html>

@@ -1,89 +1,215 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
+<head>
+    <title>회원가입</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <!-- Webpage Title -->
-        <title>회원가입</title>
+{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">#}
 
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <meta charset="UTF-8">
 
-        <!-- Bulma CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-        <!-- JS -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-
-        <script>
-            // 간단한 회원가입 함수입니다.
-            // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
-            function register() {
-                $.ajax({
-                    type: "POST",
-                    url: "/api/register",
-                    data: {
-                        id_give: $('#userid').val(),
-                        pw_give: $('#userpw').val(),
-                        nickname_give: $('#usernick').val()
-                    },
-                    success: function (response) {
-                        if (response['result'] == 'success') {
-                            alert('회원가입이 완료되었습니다.')
-                            window.location.href = '/login'
-                        } else {
-                            alert(response['msg'])
-                        }
+    <script>
+        function register() {
+            $.ajax({
+                type: "POST",
+                url: "/api/register",
+                data: {
+                    id_give: $('#userid').val(),
+                    pw_give: $('#userpw').val(),
+                    nickname_give: $('#usernick').val()
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert('회원가입이 완료되었습니다.')
+                        window.location.href = '/login'
+                    } else {
+                        alert(response['msg'])
                     }
-                })
+                }
+            })
+        }
+
+        let result_id = document.querySelector('#result')
+
+        {# innerHTML 는 안먹히고 text 로 하니까 먹히는걸 확인
+           div 는 텍스트 바이너리가 아니라서 불가능 했던걸로 추정
+           $('#result').innerHTML("확인")
+
+           정규식 참고 링크 https://hamait.tistory.com/342
+                          https://java119.tistory.com/71 이 블로그의 비밀번호 정규식 적용이다
+        #}
+        var id_reg = new RegExp('^[0-9a-zA-Z가-힣]{2,20}$')
+        var nick_reg = new RegExp('^[0-9a-zA-Z가-힣]{2,10}$')
+        var pw_reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+
+        function closeid() {
+            let newValue
+            $("#userid").on("propertychange change keyup paste input", function () {
+                newValue = $(this).val();
+                if (newValue.match(id_reg) == null) {
+                    {# 정규식 표현에 맞는 문자열이 없다면 null #}
+                    $('#result1').css('display', 'block')
+                    let target_tag = document.getElementById('userid')
+                    target_tag.setAttribute('class', 'form-control no')
+                } else {
+                    $('#result1').css('display', 'none')
+                    let target_tag = document.getElementById('userid')
+                    target_tag.setAttribute('class', 'form-control')
+                }
+            });
+        }
+
+        function closenick() {
+            let newValue
+            $("#usernick").on("propertychange change keyup paste input", function () {
+                newValue = $(this).val();
+                if (newValue.match(nick_reg) == null) {
+                    {# 정규식 표현에 맞는 문자열이 없다면 null #}
+                    $('#result2').css('display', 'block')
+                    let target_tag = document.getElementById('userid')
+                    target_tag.setAttribute('class', 'form-control two no')
+                } else {
+                    $('#result2').css('display', 'none')
+                    let target_tag = document.getElementById('userid')
+                    target_tag.setAttribute('class', 'form-control two')
+                }
+
+{#                if ($('#usernick').classList.length === 3) {
+                    $('#rego').attr('disabled', false)
+                }#}
+            });
+        }
+
+        function closepw() {
+            let newValue
+            $("#userpw").on("propertychange change keyup paste input", function () {
+                newValue = $(this).val();
+                if (newValue.match(pw_reg) == null) {
+                    {# 정규식 표현에 맞는 문자열이 없다면 null #}
+                    $('#result3').css('display', 'block')
+                    let target_tag = document.getElementById('userid')
+                    target_tag.setAttribute('class', 'form-control three no')
+                } else {
+                    $('#result3').css('display', 'none')
+                    let target_tag = document.getElementById('userid')
+                    target_tag.setAttribute('class', 'form-control three')
+                }
+
+{#                if ($('#userpw').classList.length === 3) {
+                    $('#rego').attr('disabled', false)
+                }#}
+            });
+        }
+
+    </script>
+    <style>
+        .main {
+            background-color: #e5e5e5;
+        }
+
+        .main-box {
+            background-color: #ffffff;
+            margin: 20px auto;
+            max-width: 700px;
+            height: 100%;
+
+            border-radius: 10px;
+        }
+
+        .main-box > .register-box {
+            transition: 0.3s;
+            margin: auto;
+            padding-top: 20px;
+
+            max-width: 500px;
+        }
+
+        .main-box > .register-box > .buttons {
+            display: flex;
+            justify-content: center;
+
+            margin-top: 10px;
+        }
+
+        .main-box > .register-box > .mascot {
+            width: 100%;
+
+            padding: 40px;
+        }
+
+        .main-box > .register-box > .buttons > button {
+            margin: 10px 10px 20px 10px;
+        }
+
+        @media screen and (max-width: 800px) {
+            .main-box {
+                max-width: 90%;
             }
 
-        </script>
-    </head>
-    <body>
-        <div class="section has-text-centered">
-            <h1 class="title">회원가입 페이지</h1>
-            <div class="container" style="width:60%">
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label" for="userid">ID</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input type="text" class="input" id="userid" aria-describedby="emailHelp"
-                                       placeholder="My ID">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label" for="userpw">PW</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input type="password" class="input" id="userpw" placeholder="My Password">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label" for="usernick">NICKNAME</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input type="text" class="input" id="usernick" placeholder="My Nickname">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button class="button is-primary" onclick="register()">회원가입</button>
-                <button class="button is-primary" onclick="window.location.href='login'">돌아가기</button>
-            </div>
+            .main-box > .register-box {
+                max-width: 80%;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .main-box {
+                max-width: 90%;
+            }
+
+            .main-box > .register-box {
+                max-width: 80%;
+            }
+        }
+    </style>
+</head>
+<body class="main">
+<div class="main-box">
+    <div class="register-box">
+
+        <h1 style="display: flex; justify-content: center; margin-top: 10px;">회원가입</h1>
+
+        <img class="mascot" src="/static/mascot.jpg" alt="6조 마스코트">
+
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="userid" placeholder="name@example.com"
+                   onkeyup="closeid()">
+            <label for="floatingInput">아이디</label>
         </div>
-    </body>
-</html>
+        <div id="result1" style="display: none; margin: 0 0 10px 0; border-bottom: solid 2px red;">
+            양식에 맞게 다시 입력해주세요.
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control two" id="usernick" placeholder="name@example.com"
+                   onkeyup="closenick()">
+            <label class=butt"" for="floatingInput">닉네임</label>
+        </div>
+        <div id="result2" style="display: none; margin: 0 0 10px 0; border-bottom: solid 2px red;">
+            양식에 맞게 다시 입력해주세요.
+        </div>
+
+        <div class="form-floating">
+            <input type="password" class="form-control three" id="userpw" placeholder="Password"
+                   onkeyup="closepw()">
+            <label class="butt" for="floatingPassword">비밀번호</label>
+        </div>
+        <div id="result3" style="display: none; margin: 0 0 10px 0; border-bottom: solid 2px red;">
+            양식에 맞게 다시 입력해주세요.
+        </div>
+
+        <div class="buttons">
+            <button onclick="location.href='http://localhost:5000/login'" class="btn btn-outline-primary">취소</button>
+            <button id="rego" onclick="register()" class="btn btn-outline-primary">회원가입</button>
+        </div>
+    </div>
+</div>
+</body>
