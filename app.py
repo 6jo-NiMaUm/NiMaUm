@@ -80,24 +80,36 @@ def api_register():
     nickname_receive = request.form['nickname_give']
     pwch_receive = request.form['pwch_give']
 
-    if db.user.find_one({'id': id_receive}) is not None:
+    check_id = idreg.match(id_receive)
+    check_pw = pwreg.match(pw_receive)
+    check_nick = nickreg.match(nickname_receive)
+
+    if id_receive == '':
+        return jsonify({'result': 'fail', 'msg': '아이디를 입력해 주세요 !'})
+    elif check_id is None:
+        return jsonify({'result': 'fail', 'msg': '아이디 작성시 양식에 맞게 다시 입력해 주세요 !'})
+    elif db.user.find_one({'id': id_receive}) is not None:
         find = db.user.find_one({'id': id_receive})
         idinput = find['id']
         if id_receive == idinput:
             return jsonify({'result': 'fail', 'msg': '이미 사용중인 아이디가 있습니다 !'})
-
-    if db.user.find_one({'nick': nickname_receive}) is not None:
+    elif nickname_receive == '':
+        return jsonify({'result': 'fail', 'msg': '닉네임을 입력해 주세요 !'})
+    elif check_nick is None:
+        return jsonify({'result': 'fail', 'msg': '닉네임 작성시 양식에 맞게 다시 입력해 주세요 !'})
+    elif db.user.find_one({'nick': nickname_receive}) is not None:
         find = db.user.find_one({'nick': nickname_receive})
         nickinput = find['nick']
         if nickname_receive == nickinput:
             return jsonify({'result': 'fail', 'msg': '이미 사용중인 닉네임이 있습니다 !'})
-
-    if pw_receive != pwch_receive:
+    elif pw_receive == '':
+        return jsonify({'result': 'fail', 'msg': '비밀번호를 입력해 주세요 !'})
+    elif check_pw is None:
+        return jsonify({'result': 'fail', 'msg': '비밀번호를 양식에 맞게 입력해 주세요 !'})
+    elif pwch_receive == '':
+        return jsonify({'result': 'fail', 'msg': '비밀번호를 한번 더 입력해 주세요 !'})
+    elif pw_receive != pwch_receive:
         return jsonify({'result': 'fail', 'msg': '비밀번호가 일치하지 않습니다 !'})
-
-    check_id = idreg.match(id_receive)
-    check_pw = pwreg.match(pw_receive)
-    check_nick = nickreg.match(nickname_receive)
 
     if check_id and check_pw and check_nick:
         pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
