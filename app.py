@@ -251,12 +251,18 @@ def api_count():
     return jsonify({'msg': "성공"})
 
 
+# DB변화를 감지하여 변한 데이터에 대한 값을 화면에 전달 하는 함수로 SSE (Server Sent Event) 기능을 한다.
 @app.route("/listen")
 def listen():
     def respond_to_client():
+        # 몽고DB에서 제공하는 특정 콜렉션의 DB변화 감지하는 함수
         stream = db.info.watch(full_document="updateLookup", full_document_before_change="whenAvailable")
+
+        #for문을 통해 계속 감지
         for docu in stream:
             message = "";
+
+            # 최초 값 입력시와 업데이트 결과가 다르기 때문에 별도 처리 진행
             if docu['operationType'] == 'update':
                 docu_updates = docu['updateDescription']['updatedFields']
                 for Key in docu_updates:
@@ -285,6 +291,7 @@ def listen():
                     elif Key == 'etc_count' and docu_insert['etc_count'] != 0:
                         message += "기타음료 " + str(docu_insert['etc_count']) + "잔 "
 
+            # 화면에 보낼 값을 json형태로 전달
             _data = json.dumps({
                 "nick": docu['fullDocument']['nick'],
                 "comment": message
