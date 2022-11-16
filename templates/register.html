@@ -120,10 +120,12 @@
 
         .main {
             background-color: #e5e5e5;
+            background-image: url("http://nstayimg4.speedgabia.com/arribada/main/mv01.jpg");
+
         }
 
         .main-box {
-            background-color: #ffffff;
+            background-color: #F7BE81;
             margin: 20px auto;
             max-width: 700px;
             height: 100%;
@@ -183,7 +185,7 @@
 
         <h1 style="display: flex; justify-content: center; margin-top: 10px;">회원가입</h1>
 
-        <img class="mascot" src="/static/mascot.jpg" alt="6조 마스코트">
+        <img class="mascot" src="https://cdn.imweb.me/upload/S20200515cfb40c92647b4/790be33eab815.png" alt="6조 마스코트">
 
         <div class="form-floating mb-3" style="margin-bottom: 0">
             <input type="text" class="form-control" id="userid" placeholder="name@example.com"
@@ -214,8 +216,8 @@
         </div>
 
         <div class="buttons">
-            <button onclick="location.href='http://localhost:5000/login'" class="btn btn-outline-info">취소</button>
-            <button id="rego" onclick="register()" class="btn btn-outline-info">회원가입</button>
+            <button onclick="login()" class="btn btn-warning">로그인</button>
+            <button onclick="location.href='http://localhost:5000/register'" class="btn btn-warning">회원가입</button>
         </div>
     </div>
 </div>

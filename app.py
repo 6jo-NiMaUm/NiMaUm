@@ -1,9 +1,16 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from gevent import monkey;
 
-app = Flask(__name__)
+monkey.patch_all()
+from flask import Flask, Response, render_template, stream_with_context, request, jsonify, redirect, url_for
+from gevent.pywsgi import WSGIServer
+import json
+import time
 
 from pymongo import MongoClient
 import certifi
+
+app = Flask(__name__)
+counter = 100
 
 ca = certifi.where()
 
@@ -158,7 +165,6 @@ def api_show():
     info_list = list(db.user.find({'id': userinfo['id']}, {'_id': False}).sort('coffee_count', -1))
 
     coffee_rank = list(db.user.find({}, {'_id': False}).sort('coffee_count', -1))
-
     energy_rank = list(db.user.find({}, {'_id': False}).sort('energy_count', -1))
     drink_rank = list(db.user.find({}, {'_id': False}).sort('drink_count', -1))
     carbon_rank = list(db.user.find({}, {'_id': False}).sort('carbon_count', -1))
@@ -226,6 +232,23 @@ def api_count():
                        }})
 
     return jsonify({'msg': "성공"})
+
+@app.route("/listen")
+def listen():
+    def respond_to_client():
+        stream = db.user.watch(full_document="updateLookup", full_document_before_change="whenAvailable")
+        for docu in stream:
+            _data = json.dumps({
+                "nick": docu['fullDocument']['nick'],
+                "coffee": docu['fullDocument']['coffee_count'],
+                "energy": docu['fullDocument']['energy_count'],
+                "drink": docu['fullDocument']['drink_count'],
+                "carbon": docu['fullDocument']['carbon_count'],
+                "etc": docu['fullDocument']['etc_count']
+            })
+            yield f"id: 1\ndata: {_data}\nevent: online\n\n"
+
+    return Response(respond_to_client(), mimetype='text/event-stream')
 
 
 if __name__ == '__main__':
