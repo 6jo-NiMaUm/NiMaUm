@@ -78,18 +78,22 @@ def api_register():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
     nickname_receive = request.form['nickname_give']
+    pwch_receive = request.form['pwch_give']
 
     if db.user.find_one({'id': id_receive}) is not None:
         find = db.user.find_one({'id': id_receive})
         idinput = find['id']
         if id_receive == idinput:
-            return jsonify({'result': 'fail', 'msg': '이미 사용중인 아이디가 있습니다.'})
+            return jsonify({'result': 'fail', 'msg': '이미 사용중인 아이디가 있습니다 !'})
 
     if db.user.find_one({'nick': nickname_receive}) is not None:
         find = db.user.find_one({'nick': nickname_receive})
         nickinput = find['nick']
         if nickname_receive == nickinput:
-            return jsonify({'result': 'fail', 'msg': '이미 사용중인 닉네임이 있습니다.'})
+            return jsonify({'result': 'fail', 'msg': '이미 사용중인 닉네임이 있습니다 !'})
+
+    if pw_receive != pwch_receive:
+        return jsonify({'result': 'fail', 'msg': '비밀번호가 일치하지 않습니다 !'})
 
     check_id = idreg.match(id_receive)
     check_pw = pwreg.match(pw_receive)
