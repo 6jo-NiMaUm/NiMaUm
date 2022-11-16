@@ -257,11 +257,12 @@ def listen():
     def respond_to_client():
         # 몽고DB에서 제공하는 특정 콜렉션의 DB변화 감지하는 함수
         stream = db.info.watch(full_document="updateLookup", full_document_before_change="whenAvailable")
+        stream_test = db.info.findAndModified()
 
         #for문을 통해 계속 감지
         for docu in stream:
             message = "";
-
+            print(docu)
             # 최초 값 입력시와 업데이트 결과가 다르기 때문에 별도 처리 진행
             if docu['operationType'] == 'update':
                 docu_updates = docu['updateDescription']['updatedFields']
