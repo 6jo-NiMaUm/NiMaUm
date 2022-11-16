@@ -14,7 +14,6 @@
             crossorigin="anonymous"></script>
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<!--    {# $.cookie is not a function 에러가 뜨는데 쿠키를 사용하기 위해서여 #}-->
     <script>
         {% if msg %}
             alert("{{ msg }}")
@@ -124,10 +123,6 @@
         <h1 style="display: flex; justify-content: center; margin-top: 10px;">what's your drink</h1>
         <img class="mascot" src="https://cdn.imweb.me/upload/S20200515cfb40c92647b4/790be33eab815.png" alt="6조 마스코트">
         <div class="form-floating mb-3">
-<!--<<<<<<< HEAD-->
-<!--            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"-->
-<!--            focus>-->
-<!--=======-->
             <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" onkeyup="enterkey()">
             <label for="floatingInput">아이디</label>
         </div>
@@ -137,12 +132,7 @@
         </div>
         <div class="buttons">
             <button onclick="login()" class="btn btn-warning">로그인</button>
-            <button onclick="location.href='http://localhost:5000/register'" class="btn btn-warning">회원가입
-<!--=======-->
-<!--            <button id="login-btn" onclick="login()" class="btn btn-outline-info">로그인</button>-->
-<!--            <button onclick="location.href='http://localhost:5000/register'" class="btn btn-outline-info">회원가입-->
-<!--&gt;>>>>>> c23267a21598301bd39ce0da409dfca339df85e8-->
-            </button>
+            <button onclick="location.href='http://localhost:5000/register'" class="btn btn-warning">회원가입</button>
         </div>
     </div>
 </div>
