@@ -2,9 +2,6 @@ from gevent import monkey;
 
 monkey.patch_all()
 from flask import Flask, Response, render_template, stream_with_context, request, jsonify, redirect, url_for
-from gevent.pywsgi import WSGIServer
-import json
-import time
 
 from pymongo import MongoClient
 import certifi
@@ -19,6 +16,7 @@ client = MongoClient('mongodb+srv://test:sparta@cluster0.s1j14s9.mongodb.net/Clu
 db = client.dbsparta
 
 SECRET_KEY = 'NIMAUM'
+import json
 
 import jwt
 
@@ -197,13 +195,41 @@ def listen():
     def respond_to_client():
         stream = db.user.watch(full_document="updateLookup", full_document_before_change="whenAvailable")
         for docu in stream:
+            message = "";
+            if docu['operationType'] == 'update' :
+                docu_updates = docu['updateDescription']['updatedFields']
+                for Key in docu_updates :
+                    print("update" + Key)
+                    if Key == 'coffee_count' :
+                        message += "커피 " + str(docu_updates['coffee_count']) + "잔 "
+                    elif Key == 'energy_count' :
+                        message += "에너지 드링크 " + str(docu_updates['energy_count']) + "잔 "
+                    elif Key == 'carbon_count' :
+                        message += "탄산음료 " + str(docu_updates['carbon_count']) + "잔 "
+                    elif Key == 'drink_count' :
+                        message += "술 " + str(docu_updates['drink_count']) + "잔 "
+                    elif Key == 'etc_count' :
+                        message += "기타음료 " + str(docu_updates['etc_count']) + "잔 "
+
+            elif docu['operationType'] == "insert" :
+                docu_insert = docu['fullDocument']
+                for Key in docu_insert :
+                    print("insert" + Key)
+                    if Key == 'coffee_count' and docu_insert['coffee_count'] != 0 :
+                        message += "커피 " + str(docu_insert['coffee_count']) + "잔 "
+                    elif Key == 'energy_count' and docu_insert['energy_count'] != 0 :
+                        message += "에너지 드링크 " + str(docu_insert['energy_count']) + "잔 "
+                    elif Key == 'carbon_count' and docu_insert['carbon_count'] != 0 :
+                        message += "탄산음료 " + str(docu_insert['carbon_count']) + "잔 "
+                    elif Key == 'drink_count' and docu_insert['drink_count'] != 0 :
+                        message += "술 " + str(docu_insert['drink_count']) + "잔 "
+                    elif Key == 'etc_count' and docu_insert['etc_count'] != 0 :
+                        message += "기타음료 " + str(docu_insert['etc_count']) + "잔 "
+
+
             _data = json.dumps({
                 "nick": docu['fullDocument']['nick'],
-                "coffee": docu['fullDocument']['coffee_count'],
-                "energy": docu['fullDocument']['energy_count'],
-                "drink": docu['fullDocument']['drink_count'],
-                "carbon": docu['fullDocument']['carbon_count'],
-                "etc": docu['fullDocument']['etc_count']
+                "comment": message
             })
             yield f"id: 1\ndata: {_data}\nevent: online\n\n"
 

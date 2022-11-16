@@ -326,7 +326,7 @@
 
         eventSource.addEventListener("online", function(e) {
             data = JSON.parse(e.data)
-            document.querySelector("#m_box").innerText = data.nick + " 님이 " + data.coffee + " , " + data.energy + " , " + data.drink + " , " + data.carbon + " , " + data.etc + "를 마셨습니다."
+            document.querySelector("#m_box").innerText = data.nick + " 님이 " + data.comment + "를 마셨습니다."
         }, true)
     </script>
 
