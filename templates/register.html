@@ -26,7 +26,8 @@
                 data: {
                     id_give: $('#userid').val(),
                     pw_give: $('#userpw').val(),
-                    nickname_give: $('#usernick').val()
+                    nickname_give: $('#usernick').val(),
+                    pwch_give: $('#userpwch').val()
                 },
                 success: function (response) {
                     if (response['result'] == 'success') {
@@ -60,12 +61,10 @@
                 if (newValue.match(id_reg) == null) {
                     {# 정규식 표현에 맞는 문자열이 없다면 null #}
                     $('#result1').css('display', 'block')
-                    let target_tag = document.getElementById('userid')
-                    target_tag.setAttribute('class', 'form-control no')
+
                 } else {
                     $('#result1').css('display', 'none')
-                    let target_tag = document.getElementById('userid')
-                    target_tag.setAttribute('class', 'form-control')
+
                 }
             });
         }
@@ -77,17 +76,9 @@
                 if (newValue.match(nick_reg) == null) {
                     {# 정규식 표현에 맞는 문자열이 없다면 null #}
                     $('#result2').css('display', 'block')
-                    let target_tag = document.getElementById('userid')
-                    target_tag.setAttribute('class', 'form-control two no')
                 } else {
                     $('#result2').css('display', 'none')
-                    let target_tag = document.getElementById('userid')
-                    target_tag.setAttribute('class', 'form-control two')
                 }
-
-                {#                if ($('#usernick').classList.length === 3) {
-                                    $('#rego').attr('disabled', false)
-                                }#}
             });
         }
 
@@ -98,17 +89,26 @@
                 if (newValue.match(pw_reg) == null) {
                     {# 정규식 표현에 맞는 문자열이 없다면 null #}
                     $('#result3').css('display', 'block')
-                    let target_tag = document.getElementById('userid')
-                    target_tag.setAttribute('class', 'form-control three no')
                 } else {
                     $('#result3').css('display', 'none')
-                    let target_tag = document.getElementById('userid')
-                    target_tag.setAttribute('class', 'form-control three')
                 }
+            });
+        }
 
-                {#                if ($('#userpw').classList.length === 3) {
-                                    $('#rego').attr('disabled', false)
-                                }#}
+        function closepwch() {
+            let newValue1 = $('#userpw').val()
+            let newValue2
+            console.log(newValue1)
+            $("#userpwch").on("propertychange change keyup paste input", function () {
+                newValue2 = $(this).val();
+                if (newValue1 === newValue2) {
+                    console.log('B')
+                    {# 정규식 표현에 맞는 문자열이 없다면 null #}
+                    $('#result4').css('display', 'none')
+                } else {
+                    console.log('C')
+                    $('#result4').css('display', 'block')
+                }
             });
         }
 
@@ -213,6 +213,16 @@
         <div id="result3"
              style="display: none; margin: 1rem 0 15px; color: #ef0000; font-weight: 600; font-size: 16px;">
             8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.
+        </div>
+
+        <div class="form-floating" style="margin-top: 1rem">
+            <input type="password" class="form-control four" id="userpwch" placeholder="Password"
+                   onkeyup="closepwch()">
+            <label class="butt" for="floatingPassword">비밀번호 확인</label>
+        </div>
+        <div id="result4"
+             style="display: none; margin: 1rem 0 15px; color: #ef0000; font-weight: 600; font-size: 16px;">
+            비밀번호가 일치하지 않습니다.
         </div>
 
         <div class="buttons">

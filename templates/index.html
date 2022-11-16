@@ -47,7 +47,7 @@
                 let rows_myrank = response['ranking'];
 
 
-                var arr_coffee = ['#coffee_1st', '#coffee_2nd', '#coffee_3rd', '#coffee_4th', '#coffee_5th' ];
+                var arr_coffee = ['#coffee_1st', '#coffee_2nd', '#coffee_3rd', '#coffee_4th', '#coffee_5th'];
                 var arr_energy = ['#energy_1st', '#energy_2nd', '#energy_3rd', '#energy_4th', '#energy_5th'];
                 var arr_carbon = ['#carbon_1st', '#carbon_2nd', '#carbon_3rd', '#carbon_4th', '#carbon_5th'];
                 var arr_drink = ['#drink_1st', '#drink_2nd', '#drink_3rd', '#drink_4th', '#drink_5th'];
@@ -185,6 +185,7 @@
         align-items: center;
         justify-content: center;
     }
+
     div.fixed > .message {
         text-align: center;
         margin: 0px 10px 0px 10px;
@@ -241,17 +242,16 @@
             <a href="#" class="navbar-brand d-flex align-items-center">
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">닉네임</span>
-<!--<<<<<<< HEAD-->
                     <text class="mytext" style="color:black">{{ nickname }}</text>
 
                 </div>
                 <button type="button" onclick="logout()" class="btn btn-light">로그아웃</button>
-<!--=======-->
-<!--                    <input type="text" class="form-control" placeholder="" aria-label="Username"-->
-<!--                           aria-describedby="addon-wrapping">-->
-<!--                </div>-->
-<!--                <button onclick="logout()" type="button" class="btn btn-light">로그아웃</button>-->
-<!--&gt;>>>>>> c23267a21598301bd39ce0da409dfca339df85e8-->
+                <!--=======-->
+                <!--                    <input type="text" class="form-control" placeholder="" aria-label="Username"-->
+                <!--                           aria-describedby="addon-wrapping">-->
+                <!--                </div>-->
+                <!--                <button onclick="logout()" type="button" class="btn btn-light">로그아웃</button>-->
+                <!--&gt;>>>>>> c23267a21598301bd39ce0da409dfca339df85e8-->
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
                     aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
@@ -326,18 +326,18 @@
     </section>
 
     <div class="fixed" id="massage_box">
-      <div class="message">
-          <form id="m_box"></form>
-      </div>
+        <div class="message">
+            <form id="m_box"></form>
+        </div>
     </div>
     <script>
         var eventSource = new EventSource("/listen")
 
-        eventSource.addEventListener("message", function(e) {
-          console.log(e.data)
+        eventSource.addEventListener("message", function (e) {
+            console.log(e.data)
         }, false)
 
-        eventSource.addEventListener("online", function(e) {
+        eventSource.addEventListener("online", function (e) {
             data = JSON.parse(e.data)
             document.querySelector("#m_box").innerText = data.nick + " 님이 " + data.comment + "마셨습니다."
         }, true)
