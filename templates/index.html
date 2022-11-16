@@ -46,11 +46,13 @@
                 let rows_etc = response['etc'];
                 let rows_myrank = response['ranking'];
 
-                 var arr_coffee = ['#coffee_1st', '#coffee_2nd', '#coffee_3rd', '#coffee_4th', '#coffee_5th' ];
-                        var arr_energy = ['#energy_1st', '#energy_2nd', '#energy_3rd', '#energy_4th', '#energy_5th'];
-                        var arr_carbon = ['#carbon_1st', '#carbon_2nd', '#carbon_3rd', '#carbon_4th', '#carbon_5th'];
-                        var arr_drink = ['#drink_1st', '#drink_2nd', '#drink_3rd', '#drink_4th', '#drink_5th'];
-                        var arr_etc = ['#etc_1st', '#etc_2nd', '#etc_3rd', '#etc_4th', '#etc_5th'];
+
+                var arr_coffee = ['#coffee_1st', '#coffee_2nd', '#coffee_3rd', '#coffee_4th', '#coffee_5th' ];
+                var arr_energy = ['#energy_1st', '#energy_2nd', '#energy_3rd', '#energy_4th', '#energy_5th'];
+                var arr_carbon = ['#carbon_1st', '#carbon_2nd', '#carbon_3rd', '#carbon_4th', '#carbon_5th'];
+                var arr_drink = ['#drink_1st', '#drink_2nd', '#drink_3rd', '#drink_4th', '#drink_5th'];
+                var arr_etc = ['#etc_1st', '#etc_2nd', '#etc_3rd', '#etc_4th', '#etc_5th'];
+
 
                 console.log(rows_myrank);
 
@@ -67,31 +69,28 @@
                     $('#carbonic_count').text(carbonic);
                     $('#drink_count').text(drink);
                     $('#etc_count').text(etc);
-
-
                 }
 
-                 for(let i = 0; i < rows_coffee.length; i ++){
-                            $(arr_coffee[i]).text('1. ' + rows_coffee[i]['id']);
-                        }
-
-                        for(let i = 0; i < rows_energy.length; i ++){
-                            $(arr_energy[i]).text('1. ' + rows_energy[i]['id']);
-                        }
-
-                        for(let i = 0; i < rows_carbon.length; i ++){
-                            $(arr_carbon[i]).text('1. ' + rows_carbon[i]['id']);
-                        }
-
-                        for(let i = 0; i < rows_drink.length; i ++){
-                            $(arr_drink[i]).text('1. ' + rows_drink[i]['id']);
-                        }
-
-                        for(let i = 0; i < rows_etc.length; i ++){
-                            $(arr_etc[i]).text('1. ' + rows_etc[i]['id']);
-                        }
 
 
+                for(let i = 0; i < rows_coffee.length; i ++){
+                    $(arr_coffee[i]).text('1. ' + rows_coffee[i]['id']);
+                }
+
+                for(let i = 0; i < rows_energy.length; i ++){
+                    $(arr_energy[i]).text('1. ' + rows_energy[i]['id']);
+                }
+
+                for(let i = 0; i < rows_carbon.length; i ++){
+                    $(arr_carbon[i]).text('1. ' + rows_carbon[i]['id']);
+                }
+                for(let i = 0; i < rows_drink.length; i ++){
+                    $(arr_drink[i]).text('1. ' + rows_drink[i]['id']);
+                }
+
+                for(let i = 0; i < rows_etc.length; i ++){
+                    $(arr_etc[i]).text('1. ' + rows_etc[i]['id']);
+                }
             }
         });
     }
@@ -133,8 +132,8 @@
             url: '/api/count',
             data: {coffee_give: coffee, energy_give: energy, carbon_give: carbonic, drink_give: drink, etc_give: etc},
             success: function (response) {
-                alert(response['msg'])
-                window.location.reload();
+                {#window.location.reload();#}
+                show();
             }
         });
     }
@@ -161,6 +160,24 @@
     }
 
     .mylist {
+    }
+
+    div.fixed {
+        background-color: rgba(100, 100, 100, 0.8);
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100px;
+        text-align: center;
+        color: white;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    div.fixed > .message {
+        text-align: center;
     }
 </style>
 </head>
@@ -295,6 +312,24 @@
         </div>
     </section>
 
+    <div class="fixed" id="massage_box">
+      <div class="message">
+          <form id="m_box"></form>
+      </div>
+    </div>
+    <script>
+        var eventSource = new EventSource("/listen")
+
+        eventSource.addEventListener("message", function(e) {
+          console.log(e.data)
+        }, false)
+
+        eventSource.addEventListener("online", function(e) {
+            data = JSON.parse(e.data)
+            document.querySelector("#m_box").innerText = data.nick + " 님이 " + data.coffee + " , " + data.energy + " , " + data.drink + " , " + data.carbon + " , " + data.etc + "를 마셨습니다."
+        }, true)
+    </script>
+
     <div class="album py-5 bg-light">
         <div class="container">
 
@@ -383,7 +418,6 @@
             </div>
         </div>
     </div>
-
 </main>
 
 <footer class="text-muted py-5">
@@ -397,7 +431,6 @@
             피하기</a></p>
     </div>
 </footer>
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
