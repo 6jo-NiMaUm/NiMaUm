@@ -77,23 +77,23 @@
                 $('#drink_myranking').text("나의 랭킹: " + rows_myrank[3]);
                 $('#etc_myranking').text("나의 랭킹: " + rows_myrank[4]);
 
-                for (let i = 0; i < rows_coffee.length; i++) {
-                    $(arr_coffee[i]).text('1. ' + rows_coffee[i]['id']);
+                for(let i = 0; i < rows_coffee.length; i ++){
+                   $(arr_coffee[i]).text((i+1) + '. ' + rows_coffee[i]['nick']);
                 }
 
-                for (let i = 0; i < rows_energy.length; i++) {
-                    $(arr_energy[i]).text('1. ' + rows_energy[i]['id']);
+                for(let i = 0; i < rows_energy.length; i ++){
+                    $(arr_energy[i]).text((i+1) + '. ' + rows_energy[i]['nick']);
                 }
 
-                for (let i = 0; i < rows_carbon.length; i++) {
-                    $(arr_carbon[i]).text('1. ' + rows_carbon[i]['id']);
+                for(let i = 0; i < rows_carbon.length; i ++){
+                    $(arr_carbon[i]).text((i+1) + '. ' + rows_carbon[i]['nick']);
                 }
-                for (let i = 0; i < rows_drink.length; i++) {
-                    $(arr_drink[i]).text('1. ' + rows_drink[i]['id']);
+                for(let i = 0; i < rows_drink.length; i ++){
+                    $(arr_drink[i]).text((i+1) + '. ' + rows_drink[i]['nick']);
                 }
 
-                for (let i = 0; i < rows_etc.length; i++) {
-                    $(arr_etc[i]).text('1. ' + rows_etc[i]['id']);
+                for(let i = 0; i < rows_etc.length; i ++){
+                    $(arr_etc[i]).text((i+1) + '. ' + rows_etc[i]['nick']);
                 }
             }
         });
@@ -162,7 +162,11 @@
         }
     }
 
-    .mylist {
+    .mytext {
+        background-color: #FFFFFF;
+        border-radius: 5px;
+        padding: 5px;
+        margin-right: 10px;
     }
 
     div.fixed {
@@ -173,6 +177,8 @@
         height: 100px;
         text-align: center;
         color: white;
+        max-width: 1290px;
+        margin: auto;
 
         display: flex;
         flex-direction: column;
@@ -182,12 +188,37 @@
 
     div.fixed > .message {
         text-align: center;
+        margin: 0px 10px 0px 10px;
+        font-size: 22px;
+    }
+    .mytitle {
+          width: 1290px;
+          height: 500px;
+
+          color: white;
+
+          text-align: center;
+
+          margin: auto;
+
+          background-image: url("https://www.padi.co.kr/sites/default/files/images/2019-02/maldives.jpg");
+          background-repeat: no-repeat;
+          background-position: center;
+
+      }
+    .myheader {
+        width: 1290px;
+        margin: auto;
+
+    }
+    .card{
+        font-size: 25px;
     }
 </style>
 </head>
 <body>
 
-<header>
+<header class="myheader">
     <div class="collapse bg-dark" id="navbarHeader">
         <div class="container">
             <div class="row">
@@ -211,8 +242,7 @@
             <a href="#" class="navbar-brand d-flex align-items-center">
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">닉네임</span>
-                    <!--<<<<<<< HEAD-->
-                    <span class="input-group-text">{{ nickname }}</span>
+                    <text class="mytext" style="color:black">{{ nickname }}</text>
 
                 </div>
                 <button type="button" onclick="logout()" class="btn btn-light">로그아웃</button>
@@ -232,29 +262,8 @@
 </header>
 
 <main>
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="https://t1.daumcdn.net/cfile/tistory/99C757365E243E7104" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="https://www.tourw.co.kr/data/hotel/1592204168_1.jpg" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="https://www.ttlnews.com/upload/editor_content_images/1648975232283_editor_image.wm.jpg"
-                     class="d-block w-100" alt="...">
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
-                data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
-                data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
+    <div class="mytitle">
+
     </div>
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
@@ -330,7 +339,7 @@
 
         eventSource.addEventListener("online", function (e) {
             data = JSON.parse(e.data)
-            document.querySelector("#m_box").innerText = data.nick + " 님이 " + data.comment + "를 마셨습니다."
+            document.querySelector("#m_box").innerText = data.nick + " 님이 " + data.comment + "마셨습니다."
         }, true)
     </script>
 
@@ -345,7 +354,7 @@
                         <div class="card-body">
                             <h5 class="card-title">커피</h5>
                             <p class="card-text">coffe rank</p>
-                            <text id="coffee_myranking"></text>
+                            <p id="coffee_myranking"></p>
                             <p class="mycomment" id="coffee_1st"></p>
                             <p class="mycomment" id="coffee_2nd"></p>
                             <p class="mycomment" id="coffee_3rd"></p>
@@ -358,15 +367,15 @@
                     <div class="card">
                         <img src="data:image/jpeg;base64,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"
                              class="card-img-top" alt="...">
-                        <div class="card-body-coffee">
+                        <div class="card-body">
                             <h5 class="card-title">에너지 드링크</h5>
                             <p class="card-text">anergy drink rank</p>
-                            <text id="energy_myranking"></text>
-                            <p class="mycomment" id="energy_1st">1</p>
-                            <p class="mycomment" id="energy_2nd">2</p>
-                            <p class="mycomment" id="energy_3rd">3</p>
-                            <p class="mycomment" id="energy_4th">4</p>
-                            <p class="mycomment" id="energy_5th">5</p>
+                            <p id="energy_myranking"></p>
+                            <p class="mycomment" id="energy_1st"></p>
+                            <p class="mycomment" id="energy_2nd"></p>
+                            <p class="mycomment" id="energy_3rd"></p>
+                            <p class="mycomment" id="energy_4th"></p>
+                            <p class="mycomment" id="energy_5th"></p>
                         </div>
                     </div>
                 </div>
@@ -376,12 +385,12 @@
                         <div class="card-body">
                             <h5 class="card-title">탄산음료</h5>
                             <p class="card-text">Tansan dink rank</p>
-                            <text id="carbon_myranking"></text>
-                            <p class="mycomment" id="carbon_1st">1</p>
-                            <p class="mycomment" id="carbon_2nd">2</p>
-                            <p class="mycomment" id="carbon_3rd">3</p>
-                            <p class="mycomment" id="carbon_4th">4</p>
-                            <p class="mycomment" id="carbon_5th">5</p>
+                            <p id="carbon_myranking"></p>
+                            <p class="mycomment" id="carbon_1st"></p>
+                            <p class="mycomment" id="carbon_2nd"></p>
+                            <p class="mycomment" id="carbon_3rd"></p>
+                            <p class="mycomment" id="carbon_4th"></p>
+                            <p class="mycomment" id="carbon_5th"></p>
                         </div>
                     </div>
                 </div>
@@ -392,12 +401,12 @@
                         <div class="card-body">
                             <h5 class="card-title">술</h5>
                             <p class="card-text">drunk rank</p>
-                            <text id="drink_myranking"></text>
-                            <p class="mycomment" id="drink_1st">1</p>
-                            <p class="mycomment" id="drink_2nd">2</p>
-                            <p class="mycomment" id="drink_3rd">3</p>
-                            <p class="mycomment" id="drink_4th">4</p>
-                            <p class="mycomment" id="drink_5th">5</p>
+                            <p id="drink_myranking"></p>
+                            <p class="mycomment" id="drink_1st"></p>
+                            <p class="mycomment" id="drink_2nd"></p>
+                            <p class="mycomment" id="drink_3rd"></p>
+                            <p class="mycomment" id="drink_4th"></p>
+                            <p class="mycomment" id="drink_5th"></p>
                         </div>
                     </div>
                 </div>
@@ -409,12 +418,12 @@
                         <div class="card-body">
                             <h5 class="card-title">기타</h5>
                             <p class="card-text">another drink rank</p>
-                            <text id="etc_myranking"></text>
-                            <p class="mycomment" id="etc_1st">1</p>
-                            <p class="mycomment" id="etc_2nd">2</p>
-                            <p class="mycomment" id="etc_3rd">3</p>
-                            <p class="mycomment" id="etc_4th">4</p>
-                            <p class="mycomment" id="etc_5th">5</p>
+                            <p id="etc_myranking"></p>
+                            <p class="mycomment" id="etc_1st"></p>
+                            <p class="mycomment" id="etc_2nd"></p>
+                            <p class="mycomment" id="etc_3rd"></p>
+                            <p class="mycomment" id="etc_4th"></p>
+                            <p class="mycomment" id="etc_5th"></p>
                         </div>
                     </div>
                 </div>
