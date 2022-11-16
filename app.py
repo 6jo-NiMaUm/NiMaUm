@@ -29,10 +29,20 @@ def home():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.user.find_one({"id": payload['id']})
         return render_template('index.html', nickname=user_info["nick"])
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+    except Exception as e:
+        print(e)
+        return redirect(url_for("login"))
+
+# 위의 처리 방법이 통상적인 처리 방법이다.
+# 아래의 방법으로 처리 하면 아래의 경우로 처리된 예외 말고는 알 수가 없기 때문에
+# 위 방식대로 하면 모든 경우에 대해서 예외처리가 가능하다. 그리고 나중에 원인을 알아보기 위해서
+# 프린트문으로 출력하게 해준다.
+# except jwt.ExpiredSignatureError:
+#     # 로그인 시간이 만료 되었을 때 작동하는 부분
+#     return redirect(url_for("login"))
+# except jwt.exceptions.DecodeError:
+#     # 로그인 정보가 존재하지 않습니다.
+#     return redirect(url_for("login"))
 
 
 @app.route('/login')
@@ -62,9 +72,24 @@ def api_register():
     pw_receive = request.form['pw_give']
     nickname_receive = request.form['nickname_give']
 
+    print(db.user.find_one({'id': id_receive}))
+
+    if db.user.find_one({'id': id_receive}) is not None:
+        find = db.user.find_one({'id': id_receive})
+        idinput = find['id']
+        if id_receive == idinput:
+            return jsonify({'result': 'fail', 'msg': '이미 사용중인 아이디가 있습니다.'})
+
+    if db.user.find_one({'nick': nickname_receive}) is not None:
+        find = db.user.find_one({'nick': nickname_receive})
+        nickinput = find['nick']
+        if nickname_receive == nickinput:
+            return jsonify({'result': 'fail', 'msg': '이미 사용중인 닉네임이 있습니다.'})
+
     check_id = idreg.match(id_receive)
     check_pw = pwreg.match(pw_receive)
     check_nick = nickreg.match(nickname_receive)
+
     if check_id and check_pw and check_nick:
         pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
         db.user.insert_one(
@@ -96,6 +121,21 @@ def api_login():
 
     result = db.user.find_one({'id': id_receive, 'pw': pw_hash})
 
+    if db.user.find_one({'id': id_receive}) is not None:
+        find = db.user.find_one({'id': id_receive})
+        pwinput = find['pw']
+        if pw_receive == '':
+            return jsonify({'result': 'fail', 'msg': '비밀번호를 입력해 주세요 !'})
+        elif pw_hash != pwinput:
+            return jsonify({'result': 'fail', 'msg': '입력하신 아이디의 비밀번호가 일치하지 않습니다 !'})
+
+    if id_receive == '' and pw_receive == '':
+        return jsonify({'result': 'fail', 'msg': '아이디 또는 비밀번호를 입력해 주세요 !'})
+    elif id_receive == '':
+        return jsonify({'result': 'fail', 'msg': '아이디를 입력해 주세요 !'})
+    elif db.user.find_one({'id': id_receive}) is None:
+        return jsonify({'result': 'fail', 'msg': '존재하지 않는 아이디 입니다 !'})
+
     if result is not None:
         payload = {
             'id': id_receive,
@@ -104,7 +144,9 @@ def api_login():
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
         return jsonify({'result': 'success', 'token': token})
     else:
-        return jsonify({'result': 'fail', 'msg': '아이디 또는 비밀번호가 일치하지 않습니다.'})
+        return jsonify({'result': 'fail', 'msg': '원인을 알 수 없는 에러 입니다 !'})
+
+#     return jsonify({'result': 'fail', 'msg': '아이디와 비밀번호를 입력해 주세요 !'})
 
 
 @app.route('/api/show', methods=['GET'])
@@ -112,7 +154,6 @@ def api_show():
     token_receive = request.cookies.get('mytoken')
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
     userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
-    print(userinfo)
 
     info_list = list(db.user.find({'id': userinfo['id']}, {'_id': False}).sort('coffee_count', -1))
 
