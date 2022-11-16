@@ -74,23 +74,29 @@
 
 
                 for(let i = 0; i < rows_coffee.length; i ++){
-                    $(arr_coffee[i]).text('1. ' + rows_coffee[i]['id']);
+                    $(arr_coffee[i]).text((i+1) + '. ' + rows_coffee[i]['id']);
                 }
 
                 for(let i = 0; i < rows_energy.length; i ++){
-                    $(arr_energy[i]).text('1. ' + rows_energy[i]['id']);
+                    $(arr_energy[i]).text((i+1) + '. ' + rows_energy[i]['id']);
                 }
 
                 for(let i = 0; i < rows_carbon.length; i ++){
-                    $(arr_carbon[i]).text('1. ' + rows_carbon[i]['id']);
+                    $(arr_carbon[i]).text((i+1) + '. ' + rows_carbon[i]['id']);
                 }
                 for(let i = 0; i < rows_drink.length; i ++){
-                    $(arr_drink[i]).text('1. ' + rows_drink[i]['id']);
+                    $(arr_drink[i]).text((i+1) + '. ' + rows_drink[i]['id']);
                 }
 
                 for(let i = 0; i < rows_etc.length; i ++){
-                    $(arr_etc[i]).text('1. ' + rows_etc[i]['id']);
+                    $(arr_etc[i]).text((i+1) + '. ' + rows_etc[i]['id']);
                 }
+
+                $('#coffee_myranking').text('나의 랭킹: ' + rows_myrank[0]);
+                $('#energy_myranking').text('나의 랭킹: ' + rows_myrank[1]);
+                $('#carbon_myranking').text('나의 랭킹: ' + rows_myrank[2]);
+                $('#drink_myranking').text('나의 랭킹: ' + rows_myrank[3]);
+                $('#etc_myranking').text('나의 랭킹: ' + rows_myrank[4]);
             }
         });
     }
@@ -159,7 +165,11 @@
         }
     }
 
-    .mylist {
+    .mytext {
+        background-color: #FFFFFF;
+        border-radius: 5px;
+        padding: 5px;
+        margin-right: 10px;
     }
 
     div.fixed {
@@ -194,9 +204,8 @@
                 <div class="col-sm-4 offset-md-1 py-4">
                     <h4 class="text-white">subscribe!</h4>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">구독과 좋아요~</a></li>
-                        <li><a href="#" class="text-white">follow me</a></li>
-                        <li><a href="#" class="text-white"></a></li>
+                        <li><a href="https://www.youtube.com/results?search_query=%EC%9D%8C%EB%A3%8C%EC%88%98+%EB%A8%B9%EB%B0%A9" class="text-white">구독과 좋아요~</a></li>
+                        <li><a href="https://www.youtube.com/results?search_query=%EC%9D%8C%EB%A3%8C%EC%88%98+%EB%A8%B9%EB%B0%A9" class="text-white">follow me</a></li>
                     </ul>
                 </div>
             </div>
@@ -207,9 +216,8 @@
             <a href="#" class="navbar-brand d-flex align-items-center">
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">닉네임</span>
-<!--<<<<<<< HEAD-->
-                    <span class="input-group-text">{{ nickname }}</span>
-
+{#                    <span class="input-group-text"></span>#}
+                    <text class="mytext" style="color:black">{{ nickname }}</text>
                 </div>
                 <button type="button" onclick="logout()" class="btn btn-light">로그아웃</button>
 <!--=======-->
@@ -358,11 +366,11 @@
                             <h5 class="card-title">에너지 드링크</h5>
                             <p class="card-text">anergy drink rank</p>
                             <text id="energy_myranking"></text>
-                            <p class="mycomment" id="energy_1st">1</p>
-                            <p class="mycomment" id="energy_2nd">2</p>
-                            <p class="mycomment" id="energy_3rd">3</p>
-                            <p class="mycomment" id="energy_4th">4</p>
-                            <p class="mycomment" id="energy_5th">5</p>
+                            <p class="mycomment" id="energy_1st"></p>
+                            <p class="mycomment" id="energy_2nd"></p>
+                            <p class="mycomment" id="energy_3rd"></p>
+                            <p class="mycomment" id="energy_4th"></p>
+                            <p class="mycomment" id="energy_5th"></p>
                         </div>
                     </div>
                 </div>
@@ -373,11 +381,11 @@
                             <h5 class="card-title">탄산음료</h5>
                             <p class="card-text">Tansan dink rank</p>
                             <text id="carbon_myranking"></text>
-                            <p class="mycomment" id="carbon_1st">1</p>
-                            <p class="mycomment" id="carbon_2nd">2</p>
-                            <p class="mycomment" id="carbon_3rd">3</p>
-                            <p class="mycomment" id="carbon_4th">4</p>
-                            <p class="mycomment" id="carbon_5th">5</p>
+                            <p class="mycomment" id="carbon_1st"></p>
+                            <p class="mycomment" id="carbon_2nd"></p>
+                            <p class="mycomment" id="carbon_3rd"></p>
+                            <p class="mycomment" id="carbon_4th"></p>
+                            <p class="mycomment" id="carbon_5th"></p>
                         </div>
                     </div>
                 </div>
@@ -389,11 +397,11 @@
                             <h5 class="card-title">술</h5>
                             <p class="card-text">drunk rank</p>
                             <text id="drink_myranking"></text>
-                            <p class="mycomment" id="drink_1st">1</p>
-                            <p class="mycomment" id="drink_2nd">2</p>
-                            <p class="mycomment" id="drink_3rd">3</p>
-                            <p class="mycomment" id="drink_4th">4</p>
-                            <p class="mycomment" id="drink_5th">5</p>
+                            <p class="mycomment" id="drink_1st"></p>
+                            <p class="mycomment" id="drink_2nd"></p>
+                            <p class="mycomment" id="drink_3rd"></p>
+                            <p class="mycomment" id="drink_4th"></p>
+                            <p class="mycomment" id="drink_5th"></p>
                         </div>
                     </div>
                 </div>
@@ -406,11 +414,11 @@
                             <h5 class="card-title">기타</h5>
                             <p class="card-text">another drink rank</p>
                             <text id="etc_myranking"></text>
-                            <p class="mycomment" id="etc_1st">1</p>
-                            <p class="mycomment" id="etc_2nd">2</p>
-                            <p class="mycomment" id="etc_3rd">3</p>
-                            <p class="mycomment" id="etc_4th">4</p>
-                            <p class="mycomment" id="etc_5th">5</p>
+                            <p class="mycomment" id="etc_1st"></p>
+                            <p class="mycomment" id="etc_2nd"></p>
+                            <p class="mycomment" id="etc_3rd"></p>
+                            <p class="mycomment" id="etc_4th"></p>
+                            <p class="mycomment" id="etc_5th"></p>
                         </div>
                     </div>
                 </div>
