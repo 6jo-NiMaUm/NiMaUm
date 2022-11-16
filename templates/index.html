@@ -71,25 +71,29 @@
                     $('#etc_count').text(etc);
                 }
 
-
+                $('#coffee_myranking').text("나의 랭킹: " + rows_myrank[0]);
+                $('#energy_myranking').text("나의 랭킹: " + rows_myrank[1]);
+                $('#carbon_myranking').text("나의 랭킹: " + rows_myrank[2]);
+                $('#drink_myranking').text("나의 랭킹: " + rows_myrank[3]);
+                $('#etc_myranking').text("나의 랭킹: " + rows_myrank[4]);
 
                 for(let i = 0; i < rows_coffee.length; i ++){
-                    $(arr_coffee[i]).text('1. ' + rows_coffee[i]['id']);
+                    $(arr_coffee[i]).text('1. ' + rows_coffee[i]['nick']);
                 }
 
                 for(let i = 0; i < rows_energy.length; i ++){
-                    $(arr_energy[i]).text('1. ' + rows_energy[i]['id']);
+                    $(arr_energy[i]).text('1. ' + rows_energy[i]['nick']);
                 }
 
                 for(let i = 0; i < rows_carbon.length; i ++){
-                    $(arr_carbon[i]).text('1. ' + rows_carbon[i]['id']);
+                    $(arr_carbon[i]).text('1. ' + rows_carbon[i]['nick']);
                 }
                 for(let i = 0; i < rows_drink.length; i ++){
-                    $(arr_drink[i]).text('1. ' + rows_drink[i]['id']);
+                    $(arr_drink[i]).text('1. ' + rows_drink[i]['nick']);
                 }
 
                 for(let i = 0; i < rows_etc.length; i ++){
-                    $(arr_etc[i]).text('1. ' + rows_etc[i]['id']);
+                    $(arr_etc[i]).text('1. ' + rows_etc[i]['nick']);
                 }
             }
         });

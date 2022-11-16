@@ -1,7 +1,8 @@
-from gevent import monkey;
+from gevent import monkey
 
 monkey.patch_all()
 from flask import Flask, Response, render_template, stream_with_context, request, jsonify, redirect, url_for
+# from 모듈 이름.. import 뒤는 함수 이므로 뒤에 것들은 설치 할 필요가 없다.
 
 from pymongo import MongoClient
 import certifi
@@ -37,6 +38,7 @@ def home():
     except Exception as e:
         print(e)
         return redirect(url_for("login"))
+
 
 # 위의 처리 방법이 통상적인 처리 방법이다.
 # 아래의 방법으로 처리 하면 아래의 경우로 처리된 예외 말고는 알 수가 없기 때문에
@@ -77,8 +79,6 @@ def api_register():
     pw_receive = request.form['pw_give']
     nickname_receive = request.form['nickname_give']
 
-    print(db.user.find_one({'id': id_receive}))
-
     if db.user.find_one({'id': id_receive}) is not None:
         find = db.user.find_one({'id': id_receive})
         idinput = find['id']
@@ -98,8 +98,7 @@ def api_register():
     if check_id and check_pw and check_nick:
         pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
         db.user.insert_one(
-            {'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive, 'coffee_count': 0, 'energy_count': 0,
-             'drink_count': 0, 'carbon_count': 0, 'etc_count': 0})
+            {'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive})  ### 추가 1. insert 내용 변경
         return jsonify({'result': 'success'})
     else:
         return jsonify({'result': 'fail', 'msg': '양식에 맞게 입력해 주세요.'})
@@ -151,6 +150,7 @@ def api_login():
     else:
         return jsonify({'result': 'fail', 'msg': '원인을 알 수 없는 에러 입니다 !'})
 
+
 #     return jsonify({'result': 'fail', 'msg': '아이디와 비밀번호를 입력해 주세요 !'})
 
 
@@ -160,13 +160,14 @@ def api_show():
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
     userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
 
-    info_list = list(db.user.find({'id': userinfo['id']}, {'_id': False}).sort('coffee_count', -1))
+    dt = datetime.datetime.today().strftime("%Y%m%d%H%M%S")[0:8]
 
-    coffee_rank = list(db.user.find({}, {'_id': False}).sort('coffee_count', -1))
-    energy_rank = list(db.user.find({}, {'_id': False}).sort('energy_count', -1))
-    drink_rank = list(db.user.find({}, {'_id': False}).sort('drink_count', -1))
-    carbon_rank = list(db.user.find({}, {'_id': False}).sort('carbon_count', -1))
-    etc_rank = list(db.user.find({}, {'_id': False}).sort('etc_count', -1))
+    info_list = list(db.info.find({'id': userinfo['id'], 'dt': dt}, {'_id': False}).sort('coffee_count', -1))
+    coffee_rank = list(db.info.find({'dt': dt}, {'_id': False}, ).sort('coffee_count', -1))
+    energy_rank = list(db.info.find({'dt': dt}, {'_id': False}).sort('energy_count', -1))
+    drink_rank = list(db.info.find({'dt': dt}, {'_id': False}).sort('drink_count', -1))
+    carbon_rank = list(db.info.find({'dt': dt}, {'_id': False}).sort('carbon_count', -1))
+    etc_rank = list(db.info.find({'dt': dt}, {'_id': False}).sort('etc_count', -1))
 
     # coffee energy carbon drink etc
     my_rank = [0 for i in range(5)]
@@ -211,62 +212,74 @@ def api_show():
 def api_count():
     token_receive = request.cookies.get('mytoken')
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    dt = datetime.datetime.today().strftime("%Y%m%d%H%M%S")[0:8]
     userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
 
+    nickname_receive = userinfo['nick']
     coffee_receive = request.form['coffee_give']
     energy_receive = request.form['energy_give']
     drink_receive = request.form['drink_give']
     carbon_receive = request.form['carbon_give']
     etc_receive = request.form['etc_give']
 
-    db.user.update_one({'id': userinfo['id']
-                        },
-                       {'$set': {
-                           'coffee_count': int(coffee_receive),
-                           'energy_count': int(energy_receive),
-                           'drink_count': int(drink_receive),
-                           'carbon_count': int(carbon_receive),
-                           'etc_count': int(etc_receive)
-                       }})
+    if db.info.find_one({'id': payload['id'], 'dt': dt}, {'_id': 0}) == None:
+        db.info.insert_one({
+            'id': payload['id'],
+            'nick': nickname_receive,
+            'coffee_count': int(coffee_receive),
+            'energy_count': int(energy_receive),
+            'drink_count': int(drink_receive),
+            'carbon_count': int(carbon_receive),
+            'etc_count': int(etc_receive),
+            'dt': dt
+        })
+    else:
+        db.info.update_one({'id': userinfo['id'], 'dt': dt
+                            },
+                           {'$set': {
+                               'coffee_count': int(coffee_receive),
+                               'energy_count': int(energy_receive),
+                               'drink_count': int(drink_receive),
+                               'carbon_count': int(carbon_receive),
+                               'etc_count': int(etc_receive),
+                           }})
 
     return jsonify({'msg': "성공"})
+
 
 @app.route("/listen")
 def listen():
     def respond_to_client():
-        stream = db.user.watch(full_document="updateLookup", full_document_before_change="whenAvailable")
+        stream = db.info.watch(full_document="updateLookup", full_document_before_change="whenAvailable")
         for docu in stream:
             message = "";
-            if docu['operationType'] == 'update' :
+            if docu['operationType'] == 'update':
                 docu_updates = docu['updateDescription']['updatedFields']
-                for Key in docu_updates :
-                    print("update" + Key)
-                    if Key == 'coffee_count' :
+                for Key in docu_updates:
+                    if Key == 'coffee_count':
                         message += "커피 " + str(docu_updates['coffee_count']) + "잔 "
-                    elif Key == 'energy_count' :
+                    elif Key == 'energy_count':
                         message += "에너지 드링크 " + str(docu_updates['energy_count']) + "잔 "
-                    elif Key == 'carbon_count' :
+                    elif Key == 'carbon_count':
                         message += "탄산음료 " + str(docu_updates['carbon_count']) + "잔 "
-                    elif Key == 'drink_count' :
+                    elif Key == 'drink_count':
                         message += "술 " + str(docu_updates['drink_count']) + "잔 "
-                    elif Key == 'etc_count' :
+                    elif Key == 'etc_count':
                         message += "기타음료 " + str(docu_updates['etc_count']) + "잔 "
 
-            elif docu['operationType'] == "insert" :
+            elif docu['operationType'] == "insert":
                 docu_insert = docu['fullDocument']
-                for Key in docu_insert :
-                    print("insert" + Key)
-                    if Key == 'coffee_count' and docu_insert['coffee_count'] != 0 :
+                for Key in docu_insert:
+                    if Key == 'coffee_count' and docu_insert['coffee_count'] != 0:
                         message += "커피 " + str(docu_insert['coffee_count']) + "잔 "
-                    elif Key == 'energy_count' and docu_insert['energy_count'] != 0 :
+                    elif Key == 'energy_count' and docu_insert['energy_count'] != 0:
                         message += "에너지 드링크 " + str(docu_insert['energy_count']) + "잔 "
-                    elif Key == 'carbon_count' and docu_insert['carbon_count'] != 0 :
+                    elif Key == 'carbon_count' and docu_insert['carbon_count'] != 0:
                         message += "탄산음료 " + str(docu_insert['carbon_count']) + "잔 "
-                    elif Key == 'drink_count' and docu_insert['drink_count'] != 0 :
+                    elif Key == 'drink_count' and docu_insert['drink_count'] != 0:
                         message += "술 " + str(docu_insert['drink_count']) + "잔 "
-                    elif Key == 'etc_count' and docu_insert['etc_count'] != 0 :
+                    elif Key == 'etc_count' and docu_insert['etc_count'] != 0:
                         message += "기타음료 " + str(docu_insert['etc_count']) + "잔 "
-
 
             _data = json.dumps({
                 "nick": docu['fullDocument']['nick'],
