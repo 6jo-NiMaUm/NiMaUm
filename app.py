@@ -272,9 +272,6 @@ def api_count():
 # 1. 기능 : DB변화를 감지하여 변한 데이터에 대한 값을 화면에 전달 하는 함수로 SSE (Server Sent Event) 기능을 한다.
 # 2. 작성자 : 6조 조소영
 # 3. 작성일자 : 2022-11-15
-# 4. 수정사항 : - operation 별 처리와 출력 Key값 변화에 따른 처리 적용 (2022-11-16 by.조소영)
-#              - 이전 값과 변화 값의 비교 함수 (2022-11-16 by.황지성)
-# 5. 수정일자 : 2022-11-17
 @app.route("/listen")
 def listen():
 
@@ -283,9 +280,11 @@ def listen():
         #1. DB변화 감지 스트림 생성
         stream = db.info.watch(full_document="updateLookup", full_document_before_change="whenAvailable")                               # 몽고DB의 특정 collection을 지켜보는 함수 (full_document_before_change옵션은 변경 Key값만을 알려주는 옵션)
 
-        #2. 스트림을 유지 및 DB변화
+        #2. 스트림을 유지 및 화면에 전달할 문구 정제
         for docu in stream:                                                                                                             # Stream을 유지하며 DB의 변경을 감지하기 위해 계속 도는 for문
             message = "";                                                                                                               # 화면단에서 출력할 메세지를 담는 변수
+
+            # DB변화 오퍼레이션 종류 따라 변하는 Key값 별 문구와 이전 값과의 차이 값을 계산 값을 문구 작성
             if docu['operationType'] == 'update':                                                                                       # 기존값 업데이트와 첫 값 입력시 처리를 나눔
                 docu_updates = docu['updateDescription']['updatedFields']                                                               # operation이 update일때는 update된 Key값과 value값만 출력되므로 key값을 확인해 처리
                 for Key in docu_updates:
@@ -293,68 +292,67 @@ def listen():
                         count, info = find_id(docu['fullDocument']['id'],info, docu_updates[Key], Key)                                  # 이전 데이터 값과 바뀐 데이터 값을 가져오기 위해 만든 find_id 함수 콜
                         now = docu_updates[Key] - count                                                                                 # 비교값 계산
                         if docu_updates[Key] - count < 0 :                                                                              # 잔 수를 줄였을 때의 처리와 잔 수를 늘렸을 때의 처리
-                            message += "커피 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['coffee_count']) + "잔\n"
+                            message += "커피 " + str(-now) + "잔을 쏟아서 총 "   + str(docu_updates['coffee_count']) + "잔\n"
                         else:
-                            message += "커피 " + str(now) + "잔 추가해 총 " + str(docu_updates['coffee_count']) + "잔\n"
+                            message += "커피 " + str(now)  + "잔 추가해 총 "     + str(docu_updates['coffee_count']) + "잔\n"
                     elif Key == 'energy_count':
                         count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
                         now = docu_updates[Key] - count
                         if docu_updates[Key] - count < 0:
                             message += "에너지 드링크 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['energy_count']) + "잔\n"
                         else:
-                            message += "에너지 드링크 " + str(now) + "잔 추가해 총 " + str(docu_updates['energy_count']) + "잔\n"
+                            message += "에너지 드링크 " + str(now) + "잔 추가해 총 "    + str(docu_updates['energy_count']) + "잔\n"
                     elif Key == 'carbon_count':
                         count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
                         now = docu_updates[Key] - count
                         if docu_updates[Key] - count < 0:
                             message += "탄산음료 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['carbon_count']) + "잔\n"
                         else:
-                            message += "탄산음료 " + str(now) + "잔 추가해 총 " + str(docu_updates['carbon_count']) + "잔\n"
+                            message += "탄산음료 " + str(now) + "잔 추가해 총 "    + str(docu_updates['carbon_count']) + "잔\n"
                     elif Key == 'drink_count':
                         count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
                         now = docu_updates[Key] - count
                         if docu_updates[Key] - count < 0:
-                            message += "술 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['drink_count']) + "잔\n"
+                            message += "술 " + str(-now) + "잔을 쏟아서 총 "   + str(docu_updates['drink_count']) + "잔\n"
                         else:
-                            message += "술 " + str(now) + "잔 추가해 총 " + str(docu_updates['drink_count']) + "잔\n"
+                            message += "술 " + str(now)  + "잔 추가해 총 "     + str(docu_updates['drink_count']) + "잔\n"
                     elif Key == 'etc_count':
                         count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
                         now = docu_updates[Key] - count
                         if docu_updates[Key] - count < 0:
                             message += "기타음료 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['etc_count']) + "잔\n"
                         else:
-                            message += "기타음료 " + str(now) + "잔 추가해 총 " + str(docu_updates['etc_count']) + "잔\n"
+                            message += "기타음료 " + str(now) + "잔 추가해 총 "    + str(docu_updates['etc_count']) + "잔\n"
 
             elif docu['operationType'] == "insert":
                 docu_insert = docu['fullDocument']
                 for Key in docu_insert:
                     if Key == 'coffee_count' and docu_insert['coffee_count'] != 0:
-                        message += "커피 " + str(docu_insert['coffee_count']) + "잔 추가해 총 " + str(
-                            docu_insert['coffee_count']) + "잔\n"
-                    elif Key == 'energy_count' and docu_insert['energy_count'] != 0:
-                        message += "에너지 드링크 " + str(docu_insert['energy_count']) + "잔 추가해 총 " + str(
-                            docu_insert['energy_count']) + "잔\n"
-                    elif Key == 'carbon_count' and docu_insert['carbon_count'] != 0:
-                        message += "탄산음료 " + str(docu_insert['carbon_count']) + "잔 추가해 총 " + str(
-                            docu_insert['carbon_count']) + "잔\n"
-                    elif Key == 'drink_count' and docu_insert['drink_count'] != 0:
-                        message += "술 " + str(docu_insert['drink_count']) + "잔 추가해 총 " + str(
-                            docu_insert['drink_count']) + "잔\n"
-                    elif Key == 'etc_count' and docu_insert['etc_count'] != 0:
-                        message += "기타음료 " + str(docu_insert['etc_count']) + "잔 추가해 총 " + str(
-                            docu_insert['etc_count']) + "잔\n"
+                        message += "커피 "         + str(docu_insert['coffee_count'])   + "잔 추가해 총 " + str(docu_insert['coffee_count']) + "잔\n"
 
-            #3.
-            _data = json.dumps({                                                                                                        # 화면으로 보낼 데이터를 json 형태로 저장
+                    elif Key == 'energy_count' and docu_insert['energy_count'] != 0:
+                        message += "에너지 드링크 " + str(docu_insert['energy_count'])   + "잔 추가해 총 " + str(docu_insert['energy_count']) + "잔\n"
+
+                    elif Key == 'carbon_count' and docu_insert['carbon_count'] != 0:
+                        message += "탄산음료 "      + str(docu_insert['carbon_count'])  + "잔 추가해 총 " + str(docu_insert['carbon_count']) + "잔\n"
+
+                    elif Key == 'drink_count' and docu_insert['drink_count'] != 0:
+                        message += "술 "          + str(docu_insert['drink_count'])    + "잔 추가해 총 " + str(docu_insert['drink_count'])  + "잔\n"
+
+                    elif Key == 'etc_count' and docu_insert['etc_count'] != 0:
+                        message += "기타음료 "      + str(docu_insert['etc_count'])     + "잔 추가해 총 " + str(docu_insert['etc_count'])    + "잔\n"
+
+            #3. 화면으로 전달할 데이터 JSON화
+            _data = json.dumps({
                 "nick": docu['fullDocument']['nick'],
                 "comment": message
             })
             yield f"id: 1\ndata: {_data}\nevent: online\n\n"                                                                            # yield는 for문이 돌면서 중간중간 변경 값을 출력한 값을 하나하나 전달 하기 위한 제네레이터를 생성하는 기능을 한다
                                                                                                                                         # f""는 f-string 문자열 사이에 변수를 사용할 수 있도록 하는 문법
 
-    # DB의 이전 값을 가져오는 함수
-    def find_id(id, info, update_count, key):                                                                                           # 이전 데이터 모두를 대상으로 for문을 돌려
-        for i in range(len(info)):
+    # DB의 이전 값을 리턴, info에 새로운 값을 갱신해 다시 info return 함수
+    def find_id(id, info, update_count, key):
+        for i in range(len(info)):                                                                                                      # 이전 데이터 모두를 대상으로 for문을 돌려
             if info[i]['id'] == id:                                                                                                     # 해당 아이디를 찾는다
                 result = info[i][key]                                                                                                   # 이전 값을 return할 변수에 대입
                 info[i][key] = update_count                                                                                             # info에 들어있는 값을 갱신
@@ -362,8 +360,8 @@ def listen():
 
         return                                                                                                                          # for문 안의 return값을 함수 밖으로 그대로 return, info를 다시 return하는건 info가 갱신되어 for문 안에서 돌아야하기 때문
 
-    info = list(db.info.find({}, {'_id': False}))                                                                                       # 이전 모든 데이터를 list형태로 저장
-    return Response(respond_to_client(info), mimetype='text/event-stream')                                                              # 이전 모든 데이틀 담은 info를 가지고 respond_to_clinet를 실행
+    info = list(db.info.find({}, {'_id': False}))                                                                                       # 변화 이전에 모든 데이터를 list형태로 저장
+    return Response(respond_to_client(info), mimetype='text/event-stream')                                                              # 이전 모든 데이트를 담은 info를 가지고 respond_to_clinet를 실행
 
 
 
