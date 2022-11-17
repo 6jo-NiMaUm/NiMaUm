@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <title>APP</title>
+  <script>
+      $(document).ready(function () {
+          $('#massage_box').hide();
+      });
+
+
+    function save_comment(){
+      let te = $('#comment').val()
+      let star = $('#star').val()
+
+      $.ajax({
+          type: 'POST',
+          url: '/test',
+          data: {'te_give': te, 'star_give': star},
+          success: function (response) {
+          }
+      })
+    }
+  </script>
+    <style>
+        body {
+            height: 3000px;
+        }
+        div.fixed {
+            background-color: rgba(100, 100, 100, 0.6);
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 1000px;
+            height: 100px;
+            text-align: center;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        div.fixed > .message {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+  <h1>APP</h1>
+  <div class="fixed" id="massage_box">
+      <div class="message">
+      </div>
+  </div>
+
+  <script>
+    var eventSource = new EventSource("/listen")
+
+    eventSource.addEventListener("message", function(e) {
+      console.log(e.data)
+    }, false)
+
+    eventSource.addEventListener("online", function(e) {
+      data = JSON.parse(e.data)
+        $('#massage_box').show();
+        document.querySelector("#massage_box").innerText = data.nick + " 님이 " + data.coffee + "를 마셨습니다."
+
+        setTimeout(function(){
+            $('#massage_box').hide();
+        }, 2000) // 2초후 숨김
+    }, true)
+  </script>
+  <textarea id="comment">
+  </textarea>
+  <select class="form-select" id="star">
+      <option selected>-- 선택하기 --</option>
+      <option value="1">⭐</option>
+      <option value="2">⭐⭐</option>
+      <option value="3">⭐⭐⭐</option>
+      <option value="4">⭐⭐⭐⭐</option>
+      <option value="5">⭐⭐⭐⭐⭐</option>
+  </select>
+  <button type="submit" onclick="save_comment()">저장</button>
+</body>
+</html>
