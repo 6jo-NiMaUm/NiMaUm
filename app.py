@@ -15,7 +15,6 @@ from operator import itemgetter
 
 
 app = Flask(__name__)
-# counter = 100
 
 ca = certifi.where()
 client = MongoClient('mongodb+srv://test:sparta@cluster0.s1j14s9.mongodb.net/Cluster0?retryWrites=true&w=majority',
