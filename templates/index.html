@@ -146,7 +146,7 @@
         </div>
     </div>
     <script>
-        var eventSource = new EventSource("/listen")
+        var eventSource = new EventSource("/listen")                                                                                {# /listen url에 대한 EventSource 생성  #}
 
         eventSource.addEventListener("message", function (e) {
             console.log(e.data)
