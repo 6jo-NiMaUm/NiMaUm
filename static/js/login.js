@@ -1,30 +1,35 @@
+// 1. 기능 : 로그인 버튼 Enter 키로 작동
+// 2. 작성자 : 6조 서혁수
+// 3. 작성일자 : 2022-11-14
+// 4. 수정사항 :
 function enterkey() {
+    // 1. 엔터키 입력 확인
     if (window.event.keyCode === 13) {
+        // 2. 로그인 버튼 태그 클릭 발생
         document.getElementById('login-btn').click()
     }
 }
 
-// onkeyup 어떤 키를 누르더라도 입력시 발생하는 함수 엔터키가 13번
-// 영문을 입력하면 keypress 이벤트가 사용하기 좋지만 한글은 keypress 이벤트 지원 X
-// 따라서 keypress 이벤트는 사용 X, keyup 은 키보드 누르고 때면 발생한다.
-// https://blog.miyam.net/139
-// https://stackoverflow.com/questions/40772691/trigger-button-click-in-javascript
-
-
+// 1. 기능 : 로그인 처리 함수
+// 2. 작성자 : 6조 서혁수
+// 3. 작성일자 : 2022-11-14
+// 4. 수정사항 :
 function login() {
     $.ajax({
         type: "POST",
         url: "/api/login",
         data: {id_give: $('#floatingInput').val(), pw_give: $('#floatingPassword').val()},
         success: function (response) {
-            let keyCode = window.event.keyCode
-
+            // 1. 서버로부터 받아온 응답값을 확인
             if (response['result'] == 'success') {
+                // 2. 쿠키에 mytoken 으로 토큰을 담아서 넣어주고 메시지 출력
                 $.cookie('mytoken', response['token']);
-
                 alert('로그인 완료 !')
+
+                // 3. 메인 페이지로 주소 변경
                 window.location.href = '/'
             } else {
+                // 4. 응답값이 success 가 아닐 시 메시지 출력
                 alert(response['msg'])
             }
         }
