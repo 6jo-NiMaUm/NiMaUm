@@ -118,13 +118,6 @@ def api_register():
         return jsonify({'result': 'fail', 'msg': '양식에 맞게 입력해 주세요.'})
 
 
-# var reg = "^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$";
-# var txt = "aaaa";
-# if( !reg.test(txt) ) {
-#     alert("비밀번호 정규식 규칙 위반!!");
-#     return false;
-# }
-
 # 정규식 참고 링크 https://wikidocs.net/4308
 
 # [로그인 API]
@@ -277,50 +270,55 @@ def listen():
                         now = docu_updates[Key] - count                                                                                 # 비교값 계산
                         if docu_updates[Key] - count < 0 :                                                                              # 잔 수를 줄였을 때의 처리와 잔 수를 늘렸을 때의 처리
                             message += "커피 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['coffee_count']) + "잔\n"
-                        else :
+                        else:
                             message += "커피 " + str(now) + "잔 추가해 총 " + str(docu_updates['coffee_count']) + "잔\n"
                     elif Key == 'energy_count':
-                        count, info = find_id(docu['fullDocument']['id'],info, docu_updates[Key], Key)
+                        count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
                         now = docu_updates[Key] - count
-                        if docu_updates[Key] - count < 0 :
+                        if docu_updates[Key] - count < 0:
                             message += "에너지 드링크 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['energy_count']) + "잔\n"
-                        else :
+                        else:
                             message += "에너지 드링크 " + str(now) + "잔 추가해 총 " + str(docu_updates['energy_count']) + "잔\n"
                     elif Key == 'carbon_count':
-                        count, info = find_id(docu['fullDocument']['id'],info, docu_updates[Key], Key)
+                        count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
                         now = docu_updates[Key] - count
                         if docu_updates[Key] - count < 0:
                             message += "탄산음료 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['carbon_count']) + "잔\n"
-                        else :
+                        else:
                             message += "탄산음료 " + str(now) + "잔 추가해 총 " + str(docu_updates['carbon_count']) + "잔\n"
                     elif Key == 'drink_count':
-                        count, info = find_id(docu['fullDocument']['id'],info, docu_updates[Key], Key)
+                        count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
                         now = docu_updates[Key] - count
                         if docu_updates[Key] - count < 0:
                             message += "술 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['drink_count']) + "잔\n"
-                        else :
+                        else:
                             message += "술 " + str(now) + "잔 추가해 총 " + str(docu_updates['drink_count']) + "잔\n"
                     elif Key == 'etc_count':
-                        count, info = find_id(docu['fullDocument']['id'],info, docu_updates[Key], Key)
+                        count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
                         now = docu_updates[Key] - count
                         if docu_updates[Key] - count < 0:
                             message += "기타음료 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['etc_count']) + "잔\n"
-                        else :
+                        else:
                             message += "기타음료 " + str(now) + "잔 추가해 총 " + str(docu_updates['etc_count']) + "잔\n"
 
             elif docu['operationType'] == "insert":
                 docu_insert = docu['fullDocument']
                 for Key in docu_insert:
                     if Key == 'coffee_count' and docu_insert['coffee_count'] != 0:
-                        message += "커피 " + str(docu_insert['coffee_count']) + "잔 추가해 총 " + str(docu_insert['coffee_count']) + "잔\n"
+                        message += "커피 " + str(docu_insert['coffee_count']) + "잔 추가해 총 " + str(
+                            docu_insert['coffee_count']) + "잔\n"
                     elif Key == 'energy_count' and docu_insert['energy_count'] != 0:
-                        message += "에너지 드링크 " + str(docu_insert['energy_count']) + "잔 추가해 총 " + str(docu_insert['energy_count']) + "잔\n"
+                        message += "에너지 드링크 " + str(docu_insert['energy_count']) + "잔 추가해 총 " + str(
+                            docu_insert['energy_count']) + "잔\n"
                     elif Key == 'carbon_count' and docu_insert['carbon_count'] != 0:
-                        message += "탄산음료 " + str(docu_insert['carbon_count']) + "잔 추가해 총 " + str(docu_insert['carbon_count']) + "잔\n"
+                        message += "탄산음료 " + str(docu_insert['carbon_count']) + "잔 추가해 총 " + str(
+                            docu_insert['carbon_count']) + "잔\n"
                     elif Key == 'drink_count' and docu_insert['drink_count'] != 0:
-                        message += "술 " + str(docu_insert['drink_count']) + "잔 추가해 총 " + str(docu_insert['drink_count']) + "잔\n"
+                        message += "술 " + str(docu_insert['drink_count']) + "잔 추가해 총 " + str(
+                            docu_insert['drink_count']) + "잔\n"
                     elif Key == 'etc_count' and docu_insert['etc_count'] != 0:
-                        message += "기타음료 " + str(docu_insert['etc_count']) + "잔 추가해 총 " + str(docu_insert['etc_count']) + "잔\n"
+                        message += "기타음료 " + str(docu_insert['etc_count']) + "잔 추가해 총 " + str(
+                            docu_insert['etc_count']) + "잔\n"
 
 
             _data = json.dumps({                                                                                                        # 화면으로 보낼 데이터를 json 형태로 저장
@@ -341,9 +339,9 @@ def listen():
 
         return                                                                                                                          # for문 안의 return값을 함수 밖으로 그대로 return, info를 다시 return하는건 info가 갱신되어 for문 안에서 돌아야하기 때문
 
-
     info = list(db.info.find({}, {'_id': False}))                                                                                       # 이전 모든 데이터를 list형태로 저장
     return Response(respond_to_client(info), mimetype='text/event-stream')                                                              # 이전 모든 데이틀 담은 info를 가지고 respond_to_clinet를 실행
+
 
 
 def update_date():
@@ -358,3 +356,4 @@ if __name__ == '__main__':
     while True:
         schedule.run_pending()
         time.sleep(1)
+

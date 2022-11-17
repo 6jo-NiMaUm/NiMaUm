@@ -26,8 +26,15 @@ let result_id = document.querySelector('#result')
    $('#result').innerHTML("확인")
 
    아래의 정규식에서 new 가 왜 안돼는지 관련
-   정규식 참고 링크 https://hamait.tistory.com/342
-                  https://java119.tistory.com/71 이 블로그의 비밀번호 정규식 적용이다 */
+   정규식 참고 링크 https://hamait.tistory.com/342,
+                  https://java119.tistory.com/71 이 블로그의 비밀번호 정규식 적용이다
+    정규식(Regular Expression) 줄여서 regexp 라고 한다.
+    아래에 선언한 것 처럼 두가지 방식의 선언방식이 있다.
+    그리거 match 메서드를 이용하면 "문자열"에서 "정규표현식"에 매칭되는 항목들을 배열로 반환한다.
+    https://beomy.tistory.com/21 아래 두가지 방법에 대한 차이의 설명
+    정규식 패턴이 변경되는 경우 생성자 함수를 사용하여 동적으로 정규식을 만들 수 있다.
+    정규식 패턴이 계속 지속될 경우 아래의 방법중 new 연산자를 쓰지않는 방법을 사용
+*/
 
 var id_reg = new RegExp('^[0-9a-zA-Z가-힣]{5,20}$')
 var nick_reg = new RegExp('^[0-9a-zA-Z가-힣]{2,10}$')
