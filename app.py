@@ -1,7 +1,7 @@
 import time
 import schedule as schedule
-from gevent import monkey                                                                                                           # gevent는 동시성과 네트워크 관련 작업들을 위한 다양한 API를 제공
-monkey.patch_all()                                                                                                                  # 몽키 패치는 실행중인 프로그램의 메모리 소스를 바꾸는 것으로서, 런타임 환경에서 프로그램의 특정 기능을 수정하여 사용하는 기법
+from gevent import monkey                                                                                           # gevent는 동시성과 네트워크 관련 작업들을 위한 다양한 API를 제공
+monkey.patch_all()                                                                                                  # 몽키 패치는 실행중인 프로그램의 메모리 소스를 바꾸는 것으로서, 런타임 환경에서 프로그램의 특정 기능을 수정하여 사용하는 기법
 from flask import Flask, Response, render_template, stream_with_context, request, jsonify, redirect, url_for
 # from 모듈 이름.. import 뒤는 함수 이므로 뒤에 것들은 설치 할 필요가 없다.
 from pymongo import MongoClient
@@ -18,7 +18,6 @@ app = Flask(__name__)
 # counter = 100
 
 ca = certifi.where()
-
 client = MongoClient('mongodb+srv://test:sparta@cluster0.s1j14s9.mongodb.net/Cluster0?retryWrites=true&w=majority',
                      tlsCAFile=ca)
 db = client.dbsparta
@@ -115,7 +114,7 @@ def api_register():
             {'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive})
         return jsonify({'result': 'success'})                                       # 결과를 result 키에 success 값을 반환
     else:
-        return jsonify({'result': 'fail', 'msg': '양식에 맞게 입력해 주세요.'})         # 위의 모든 과정과 맞지 않으면 발생
+        return jsonify({'result': 'fail', 'msg': '양식에 맞게 입력해 주세요.'})        # 위의 모든 과정과 맞지 않으면 발생
 
 
 # 1. 기능 : 로그인 처리 API
@@ -135,32 +134,32 @@ def api_login():
     result = db.user.find_one({'id': id_receive, 'pw': pw_hash})
 
     # 4. 가입된 ID 가 존재할 경우 예외처리
-    if db.user.find_one({'id': id_receive}) is not None:                                            # 입력받은 아이디가 DB 에 존재하면
-        find = db.user.find_one({'id': id_receive})                                                 # find 변수에 해당 아이디의 DB 정보를 가져옴
-        pwinput = find['pw']                                                                        # pwinput 변수에 비밀번호 값만 가져온다.
-        if pw_receive == '':                                                                        # 비밀번호를 입력하지 않을시 메시지 출력
+    if db.user.find_one({'id': id_receive}) is not None:                                                # 입력받은 아이디가 DB 에 존재하면
+        find = db.user.find_one({'id': id_receive})                                                     # find 변수에 해당 아이디의 DB 정보를 가져옴
+        pwinput = find['pw']                                                                            # pwinput 변수에 비밀번호 값만 가져온다.
+        if pw_receive == '':                                                                            # 비밀번호를 입력하지 않을시 메시지 출력
             return jsonify({'result': 'fail', 'msg': '비밀번호를 입력해 주세요 !'})
-        elif pw_hash != pwinput:                                                                    # DB 의 비밀번호와 입력한 비밀번호가 일치하지 않으면 메시지 출력
+        elif pw_hash != pwinput:                                                                        # DB 의 비밀번호와 입력한 비밀번호가 일치하지 않으면 메시지 출력
             return jsonify({'result': 'fail', 'msg': '입력하신 아이디의 비밀번호가 일치하지 않습니다 !'})
 
     # 5. 입력값이 없거나 ID 가 없을 경우 예외처리
-    if id_receive == '' and pw_receive == '':                                                       # ID 와 비밀번호 모두 입력하지 않을시 메시지 출력
+    if id_receive == '' and pw_receive == '':                                                           # ID 와 비밀번호 모두 입력하지 않을시 메시지 출력
         return jsonify({'result': 'fail', 'msg': '아이디 또는 비밀번호를 입력해 주세요 !'})
-    elif id_receive == '':                                                                          # ID 만 입력하지 않을시 메시지 출력
+    elif id_receive == '':                                                                              # ID 만 입력하지 않을시 메시지 출력
         return jsonify({'result': 'fail', 'msg': '아이디를 입력해 주세요 !'})
-    elif db.user.find_one({'id': id_receive}) is None:                                              # 아이디가 DB 에 존재하지 않을시 메시지 출력
+    elif db.user.find_one({'id': id_receive}) is None:                                                  # 아이디가 DB 에 존재하지 않을시 메시지 출력
         return jsonify({'result': 'fail', 'msg': '존재하지 않는 아이디 입니다 !'})
 
     # 6. 결과적으로 ID, PW 모두 존재하고 맞을 경우 로그인 완료
-    if result is not None:                                                          # result 의 값이 None 아닐시
-        payload = {                                                                 # payload 에 ID 를 담고, 파기될 시간 정보도 담는다.
+    if result is not None:                                                                              # result 의 값이 None 아닐시
+        payload = {                                                                                     # payload 에 ID 를 담고, 파기될 시간 정보도 담는다.
             'id': id_receive,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
         }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')                  # 토큰에다가 payload 정보와 암호화 키를 담아서 sha256 방식으로 암호화 한다.
-        return jsonify({'result': 'success', 'token': token})                       # 해당 토큰을 리턴
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')                                      # 토큰에다가 payload 정보와 암호화 키를 담아서 sha256 방식으로 암호화 한다.
+        return jsonify({'result': 'success', 'token': token})                                           # 해당 토큰을 리턴
     else:
-        return jsonify({'result': 'fail', 'msg': '원인을 알 수 없는 에러 입니다 !'})    # 예외 사항의 경우 메시지를 출력
+        return jsonify({'result': 'fail', 'msg': '원인을 알 수 없는 에러 입니다 !'})                       # 예외 사항의 경우 메시지를 출력
 
 
 # 1. 기능: 웹 페이지로 DB 데이터 전송
@@ -179,12 +178,31 @@ def api_show():
     dt = datetime.datetime.today().strftime("%Y%m%d%H%M%S")[0:8]
 
 
+    # 기간별 데이터 추출
+    info_list = list(db.info.find({'id': userinfo['id'], 'dt': {"$gte": update_dt, "$lte": str(int(update_dt) + 6)}},
+                                  {'_id': False}).sort('coffee_count', -1))
+    merge_count = list(db.info.aggregate([{'$group': {'_id': {'id': '$id', 'nick': '$nick'},
+                                                      'coffee_count': {'$sum': '$coffee_count'},
+                                                      'energy_count': {'$sum': '$energy_count'},
+                                                      'drink_count': {'$sum': '$drink_count'},
+                                                      'carbon_count': {'$sum': '$carbon_count'},
+                                                      'etc_count': {'$sum': '$etc_count'}
+                                                      }}]))
+
+    coffee_rank = sorted(merge_count, key=itemgetter('coffee_count'), reverse=True)
+    energy_rank = sorted(merge_count, key=itemgetter('energy_count'), reverse=True)
+    drink_rank = sorted(merge_count, key=itemgetter('drink_count'), reverse=True)
+    carbon_rank = sorted(merge_count, key=itemgetter('carbon_count'), reverse=True)
+    etc_rank = sorted(merge_count, key=itemgetter('etc_count'), reverse=True)
+
+
     # 3. DB 데이터 추출(기간별 데이터)
     info_list = list(db.info.find({
                                     'id': userinfo['id'],
                                     'dt': {"$gte": update_dt, "$lte": str(int(update_dt) + 6)}},
                                   {'_id': False}).sort('coffee_count', -1)
                      )
+
 
 
     # 4. 그룹화된 DB 데이터 추출(그룹화 기준 : id, nick)
@@ -298,9 +316,6 @@ def api_count():
 # 1. 기능 : DB변화를 감지하여 변한 데이터에 대한 값을 화면에 전달 하는 함수로 SSE (Server Sent Event) 기능을 한다.
 # 2. 작성자 : 6조 조소영
 # 3. 작성일자 : 2022-11-15
-# 4. 수정사항 : - operation 별 처리와 출력 Key값 변화에 따른 처리 적용 (2022-11-16 by.조소영)
-#              - 이전 값과 변화 값의 비교 함수 (2022-11-16 by.황지성)
-# 5. 수정일자 : 2022-11-17
 @app.route("/listen")
 def listen():
 
@@ -309,7 +324,7 @@ def listen():
         #1. DB변화 감지 스트림 생성
         stream = db.info.watch(full_document="updateLookup", full_document_before_change="whenAvailable")                               # 몽고DB의 특정 collection을 지켜보는 함수 (full_document_before_change옵션은 변경 Key값만을 알려주는 옵션)
 
-        #2. 스트림을 유지 및 DB변화
+        #2. 스트림을 유지 및 화면에 전달할 문구 정제
         for docu in stream:                                                                                                             # Stream을 유지하며 DB의 변경을 감지하기 위해 계속 도는 for문
             message = "";                                                                                                               # 화면단에서 출력할 메세지를 담는 변수
             if docu['operationType'] == 'update':                                                                                       # 기존값 업데이트와 첫 값 입력시 처리를 나눔
@@ -319,59 +334,57 @@ def listen():
                         count, info = find_id(docu['fullDocument']['id'],info, docu_updates[Key], Key)                                  # 이전 데이터 값과 바뀐 데이터 값을 가져오기 위해 만든 find_id 함수 콜
                         now = docu_updates[Key] - count                                                                                 # 비교값 계산
                         if docu_updates[Key] - count < 0 :                                                                              # 잔 수를 줄였을 때의 처리와 잔 수를 늘렸을 때의 처리
-                            message += "커피 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['coffee_count']) + "잔\n"
+                            message += "커피 " + str(-now) + "잔을 쏟아서 총 "   + str(docu_updates['coffee_count']) + "잔\n"
                         else:
-                            message += "커피 " + str(now) + "잔 추가해 총 " + str(docu_updates['coffee_count']) + "잔\n"
+                            message += "커피 " + str(now)  + "잔 추가해 총 "     + str(docu_updates['coffee_count']) + "잔\n"
                     elif Key == 'energy_count':
                         count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
                         now = docu_updates[Key] - count
                         if docu_updates[Key] - count < 0:
                             message += "에너지 드링크 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['energy_count']) + "잔\n"
                         else:
-                            message += "에너지 드링크 " + str(now) + "잔 추가해 총 " + str(docu_updates['energy_count']) + "잔\n"
+                            message += "에너지 드링크 " + str(now) + "잔 추가해 총 "    + str(docu_updates['energy_count']) + "잔\n"
                     elif Key == 'carbon_count':
                         count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
                         now = docu_updates[Key] - count
                         if docu_updates[Key] - count < 0:
                             message += "탄산음료 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['carbon_count']) + "잔\n"
                         else:
-                            message += "탄산음료 " + str(now) + "잔 추가해 총 " + str(docu_updates['carbon_count']) + "잔\n"
+                            message += "탄산음료 " + str(now) + "잔 추가해 총 "    + str(docu_updates['carbon_count']) + "잔\n"
                     elif Key == 'drink_count':
                         count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
                         now = docu_updates[Key] - count
                         if docu_updates[Key] - count < 0:
-                            message += "술 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['drink_count']) + "잔\n"
+                            message += "술 " + str(-now) + "잔을 쏟아서 총 "   + str(docu_updates['drink_count']) + "잔\n"
                         else:
-                            message += "술 " + str(now) + "잔 추가해 총 " + str(docu_updates['drink_count']) + "잔\n"
+                            message += "술 " + str(now)  + "잔 추가해 총 "     + str(docu_updates['drink_count']) + "잔\n"
                     elif Key == 'etc_count':
                         count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
                         now = docu_updates[Key] - count
                         if docu_updates[Key] - count < 0:
                             message += "기타음료 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['etc_count']) + "잔\n"
                         else:
-                            message += "기타음료 " + str(now) + "잔 추가해 총 " + str(docu_updates['etc_count']) + "잔\n"
+                            message += "기타음료 " + str(now) + "잔 추가해 총 "    + str(docu_updates['etc_count']) + "잔\n"
 
             elif docu['operationType'] == "insert":
                 docu_insert = docu['fullDocument']
                 for Key in docu_insert:
                     if Key == 'coffee_count' and docu_insert['coffee_count'] != 0:
-                        message += "커피 " + str(docu_insert['coffee_count']) + "잔 추가해 총 " + str(
-                            docu_insert['coffee_count']) + "잔\n"
+                        message += "커피 "         + str(docu_insert['coffee_count'])   + "잔 추가해 총 " + str(docu_insert['coffee_count']) + "잔\n"
                     elif Key == 'energy_count' and docu_insert['energy_count'] != 0:
-                        message += "에너지 드링크 " + str(docu_insert['energy_count']) + "잔 추가해 총 " + str(
-                            docu_insert['energy_count']) + "잔\n"
-                    elif Key == 'carbon_count' and docu_insert['carbon_count'] != 0:
-                        message += "탄산음료 " + str(docu_insert['carbon_count']) + "잔 추가해 총 " + str(
-                            docu_insert['carbon_count']) + "잔\n"
-                    elif Key == 'drink_count' and docu_insert['drink_count'] != 0:
-                        message += "술 " + str(docu_insert['drink_count']) + "잔 추가해 총 " + str(
-                            docu_insert['drink_count']) + "잔\n"
-                    elif Key == 'etc_count' and docu_insert['etc_count'] != 0:
-                        message += "기타음료 " + str(docu_insert['etc_count']) + "잔 추가해 총 " + str(
-                            docu_insert['etc_count']) + "잔\n"
+                        message += "에너지 드링크 " + str(docu_insert['energy_count'])   + "잔 추가해 총 " + str(docu_insert['energy_count']) + "잔\n"
 
-            #3.
-            _data = json.dumps({                                                                                                        # 화면으로 보낼 데이터를 json 형태로 저장
+                    elif Key == 'carbon_count' and docu_insert['carbon_count'] != 0:
+                        message += "탄산음료 "      + str(docu_insert['carbon_count'])  + "잔 추가해 총 " + str(docu_insert['carbon_count']) + "잔\n"
+
+                    elif Key == 'drink_count' and docu_insert['drink_count'] != 0:
+                        message += "술 "          + str(docu_insert['drink_count'])    + "잔 추가해 총 " + str(docu_insert['drink_count'])  + "잔\n"
+
+                    elif Key == 'etc_count' and docu_insert['etc_count'] != 0:
+                        message += "기타음료 "      + str(docu_insert['etc_count'])     + "잔 추가해 총 " + str(docu_insert['etc_count'])    + "잔\n"
+
+            #3. 화면으로 전달할 데이터 JSON화
+            _data = json.dumps({
                 "nick": docu['fullDocument']['nick'],
                 "comment": message
             })
@@ -388,8 +401,8 @@ def listen():
 
         return                                                                                                                          # for문 안의 return값을 함수 밖으로 그대로 return, info를 다시 return하는건 info가 갱신되어 for문 안에서 돌아야하기 때문
 
-    info = list(db.info.find({}, {'_id': False}))                                                                                       # 이전 모든 데이터를 list형태로 저장
-    return Response(respond_to_client(info), mimetype='text/event-stream')
+    info = list(db.info.find({}, {'_id': False}))                                                                                       # 변화 이전에 모든 데이터를 list형태로 저장
+    return Response(respond_to_client(info), mimetype='text/event-stream')                                                              # 이전 모든 데이트를 담은 info를 가지고 respond_to_clinet를 실행
 
 
 def update_date():
@@ -409,3 +422,9 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
+
+    schedule.every().monday.do(update_date())
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+

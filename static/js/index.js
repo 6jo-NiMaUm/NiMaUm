@@ -48,22 +48,22 @@ function show() {
             $('#etc_myranking').text("나의 랭킹: " + rows_myrank[4]);
 
             for (let i = 0; i < rows_coffee.length; i++) {
-                $(arr_coffee[i]).text((i + 1) + '. ' + rows_coffee[i]['nick']);
+                $(arr_coffee[i]).text((i + 1) + '. ' + rows_coffee[i]['_id']['nick']);
             }
 
             for (let i = 0; i < rows_energy.length; i++) {
-                $(arr_energy[i]).text((i + 1) + '. ' + rows_energy[i]['nick']);
+                $(arr_energy[i]).text((i + 1) + '. ' + rows_energy[i]['_id']['nick']);
             }
 
             for (let i = 0; i < rows_carbon.length; i++) {
-                $(arr_carbon[i]).text((i + 1) + '. ' + rows_carbon[i]['nick']);
+                $(arr_carbon[i]).text((i + 1) + '. ' + rows_carbon[i]['_id']['nick']);
             }
             for (let i = 0; i < rows_drink.length; i++) {
-                $(arr_drink[i]).text((i + 1) + '. ' + rows_drink[i]['nick']);
+                $(arr_drink[i]).text((i + 1) + '. ' + rows_drink[i]['_id']['nick']);
             }
 
             for (let i = 0; i < rows_etc.length; i++) {
-                $(arr_etc[i]).text((i + 1) + '. ' + rows_etc[i]['nick']);
+                $(arr_etc[i]).text((i + 1) + '. ' + rows_etc[i]['_id']['nick']);
             }
         }
     });
