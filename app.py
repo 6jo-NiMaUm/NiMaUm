@@ -265,23 +265,34 @@ def api_count():
 
 @app.route("/listen")
 def listen():
-    def respond_to_client():
+    def respond_to_client(info):
         stream = db.info.watch(full_document="updateLookup", full_document_before_change="whenAvailable")
+
         for docu in stream:
             message = "";
             if docu['operationType'] == 'update':
                 docu_updates = docu['updateDescription']['updatedFields']
                 for Key in docu_updates:
                     if Key == 'coffee_count':
-                        message += "커피 " + str(docu_updates['coffee_count']) + "잔 "
+                        count, info = find_id(docu['fullDocument']['id'],info, docu_updates[Key], Key)
+                        now = str(docu_updates[Key] - count)
+                        message += "커피 " + now + "잔 추가해 총" + str(docu_updates['coffee_count']) + "잔\n"
                     elif Key == 'energy_count':
-                        message += "에너지 드링크 " + str(docu_updates['energy_count']) + "잔 "
+                        count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
+                        now = str(docu_updates[Key] - count)
+                        message += "에너지 드링크 " + now + "잔 추가해 총 " + str(docu_updates['energy_count']) + "잔\n"
                     elif Key == 'carbon_count':
-                        message += "탄산음료 " + str(docu_updates['carbon_count']) + "잔 "
+                        count, info = find_id(docu['fullDocument']['id'],info, docu_updates[Key], Key)
+                        now = str(docu_updates[Key] - count)
+                        message += "탄산음료 " + now + "잔 추가해 총 " + str(docu_updates['carbon_count']) + "잔\n"
                     elif Key == 'drink_count':
-                        message += "술 " + str(docu_updates['drink_count']) + "잔 "
+                        count, info = find_id(docu['fullDocument']['id'],info, docu_updates[Key], Key)
+                        now = str(docu_updates[Key] - count)
+                        message += "술 " + now + "잔 추가해 총 " + str(docu_updates['drink_count']) + "잔\n"
                     elif Key == 'etc_count':
-                        message += "기타음료 " + str(docu_updates['etc_count']) + "잔 "
+                        count, info = find_id(docu['fullDocument']['id'],info, docu_updates[Key], Key)
+                        now = str(docu_updates[Key] - count)
+                        message += "기타음료 " + now + "잔 추가해 총 " + str(docu_updates['etc_count']) + "잔\n"
 
             elif docu['operationType'] == "insert":
                 docu_insert = docu['fullDocument']
@@ -303,7 +314,20 @@ def listen():
             })
             yield f"id: 1\ndata: {_data}\nevent: online\n\n"
 
-    return Response(respond_to_client(), mimetype='text/event-stream')
+    def find_id(id, info, update_count, key):
+        for i in range(len(info)):
+            if info[i]['id'] == id:
+                result = info[i][key]
+                info[i][key] = update_count
+
+                return result, info
+
+        return
+
+
+    info = list(db.info.find({}, {'_id': False}))
+    print(info)
+    return Response(respond_to_client(info), mimetype='text/event-stream')
 
 
 if __name__ == '__main__':
