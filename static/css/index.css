@@ -1,0 +1,164 @@
+* {
+        font-family: 'Poor Story', cursive;
+    }
+
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        /*font-size는 글자 크기를 정하는 속성*/
+        text-anchor: middle;
+        /*text의 중심점을 정하는 요소인데 middle로 설정 해줘야 텍스트의 중앙에 오게됨.*/
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        /*user-select는 브라우저에서 드래그나 더블 클릭을 사용한 텍스트 선택 등을 막으려면 몇 가지 방법이 있는데 none으로 설정된 경우 선택되지 않게됩니다. 이 경우 클릭이나 드래그로 선택할 수 없다.*/
+    }
+
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+            /*font-size는 글자 크기를 정하는 속성*/
+        }
+    }
+
+    .mytext {
+        background-color: #FFFFFF;
+        /*말그대로 백그라운드의 색을 정한다.*/
+        border-radius: 5px;
+        /*테두리를 둥글게 만드는 속성*/
+        padding: 5px;
+        /*padding 속성은 내용(content)과 테두리(border) 사이의 간격인 패딩 영역의 크기*/
+        margin-right: 10px;
+        /*마진 영역에 해당되는 오른쪽으로 가는 부분 설정*/
+    }
+
+    div.fixed {
+        background-color: rgba(100, 100, 100, 0.8);
+        /*말그대로 백그라운드의 색을 정한다.*/
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        /*width 속성은 엘리먼트의 너비를 제어하기 위해서 사용되는데 퍼센트로 축소확대에 대비함 */
+        height: auto;
+        /*height는 엘리먼트의 높이를 제어함*/
+        min-height: 100px;
+        max-auto: 210px;
+        /*자동적으로 설정해주는 오토값을 최대치로 잡는다*/
+        padding: 5px 0 5px 0;
+        /*padding 속성은 내용(content)과 테두리(border) 사이의 간격인 패딩 영역의 크기*/
+        text-align: center;
+        /*text-align 속성은 텍스트의 정렬 방향*/
+        color: white;
+        /*색깔 설정*/
+        max-width: 1290px;
+        /*max width나 height를 사용해서 최대치를 설정해서 축소를해도 끝까지 안밀려나게 설정*/
+        margin: auto;
+        /*margin 속성은 테두리(border)와 이웃하는 요소 사이의 간격인 마진 영역의 크기를 설정*/
+
+        display: flex;
+        /*display 속성은 웹 페이지의 레이아웃(layout)을 결정하는 CSS의 중요한 속성 중 하나*/
+        flex-direction: column;
+        /*주축을 설정*/
+        align-items: center;
+        /*align-items 속성은 플렉스 요소의 수직 방향 정렬 방식을 설정합니다*/
+        justify-content: center;
+        /*가로축 * 중심축*/
+    }
+
+    div.fixed > .message {
+        text-align: center;
+        /*text-align 속성은 텍스트의 정렬 방향*/
+        margin: 0px 10px 0px 10px;
+        /*margin 속성은 테두리(border)와 이웃하는 요소 사이의 간격인 마진 영역의 크기를 설정*/
+        font-size: 22px;
+        /*font-size는 글자 크기를 정하는 속성*/
+    }
+    .mytitle {
+          width: 100%;
+        /*width 속성은 엘리먼트의 너비를 제어하기 위해서 사용되는데 퍼센트로 축소확대에 대비함 */
+          height: 500px;
+        /*height는 엘리먼트의 높이를 제어함*/
+
+          max-width: 1290px;
+        /*max width나 height를 사용해서 최대치를 설정해서 축소를해도 끝까지 안밀려나게 설정*/
+
+          color: white;
+        /*색깔 설정*/
+
+          text-align: center;
+        /*text-align 속성은 텍스트의 정렬 방향*/
+
+          margin: auto;
+        /*margin 속성은 테두리(border)와 이웃하는 요소 사이의 간격인 마진 영역의 크기를 설정*/
+
+          background-image: url("https://www.padi.co.kr/sites/default/files/images/2019-02/maldives.jpg");
+          /*백그라운드 이미지를 가져오는 기능*/
+          background-repeat: no-repeat;
+          /*백그라운드 사진이 축소를 할때 반복되는 설정을 막아준다.*/
+          background-position: center;
+          /*백그라운드 포지션을 center로 잡아준다.*/
+      }
+    .myheader {
+        width: 100%;
+        /*width 속성은 엘리먼트의 너비를 제어하기 위해서 사용되는데 퍼센트로 축소확대에 대비함 */
+        margin: auto;
+        /*margin 속성은 테두리(border)와 이웃하는 요소 사이의 간격인 마진 영역의 크기를 설정*/
+        max-width: 1290px;
+        /*max width나 height를 사용해서 최대치를 설정해서 축소를해도 끝까지 안밀려나게 설정*/
+
+    }
+    .card{
+        font-size: 25px;
+        /*font-size는 글자 크기를 정하는 속성*/
+    }
+    .bg-light {
+        background-color: #e5e5e5;
+        /*말그대로 백그라운드의 색을 정한다.*/
+        margin: auto;
+        /*margin 속성은 테두리(border)와 이웃하는 요소 사이의 간격인 마진 영역의 크기를 설정*/
+        max-width: 1290px;
+        /*max width나 height를 사용해서 최대치를 설정해서 축소를해도 끝까지 안밀려나게 설정*/
+    }
+    .mylist {
+        font-size: 25px;
+        /*font-size는 글자 크기를 정하는 속성*/
+    }
+    .count-num {
+        margin: 10px;
+        /*margin 속성은 테두리(border)와 이웃하는 요소 사이의 간격인 마진 영역의 크기를 설정*/
+    }
+    .btn-outline-info {
+        width: 40px;
+        /*width 속성은 엘리먼트의 너비를 제어하기 위해서 사용됨 */
+        height: 40px;
+        /*height는 엘리먼트의 높이를 제어함*/
+    }
+    .btn-outline-dark {
+        font-size: 28px;
+        /*font-size는 글자 크기를 정하는 속성*/
+    }
+    .myh1 {
+        font-weight: 900;
+        /*width 속성은 엘리먼트의 너비를 제어하기 위해서 사용됨*/
+        font-size: 100px;
+        /*font-size는 글자 크기를 정하는 속성*/
+    }
+    .rank-comment {
+        display: flex;
+        /*display 속성은 웹 페이지의 레이아웃(layout)을 결정하는 CSS의 중요한 속성 중 하나*/
+        justify-content: center;
+        /*가로축 * 중심축*/
+        background-color: rgb(211 211 211 / 80%);
+        /*말그대로 백그라운드의 색을 정한다.*/
+        font-size: 22px;
+        /*font-size는 글자 크기를 정하는 속성*/
+        padding: 5px;
+        /*padding 속성은 내용(content)과 테두리(border) 사이의 간격인 패딩 영역의 크기*/
+        width: 100%;
+        /*width 속성은 엘리먼트의 너비를 제어하기 위해서 사용되는데 퍼센트로 축소확대에 대비함 */
+        max-width: 1290px;
+        /*max width나 height를 사용해서 최대치를 설정해서 축소를해도 끝까지 안밀려나게 설정*/
+        margin: auto;
+        /*margin 속성은 테두리(border)와 이웃하는 요소 사이의 간격인 마진 영역의 크기를 설정*/
+        border: solid 2px rgb(119 230 255);
+        /*border는 테두리를 만드는 속성*/
+    }
