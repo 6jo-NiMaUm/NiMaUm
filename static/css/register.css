@@ -1,64 +1,84 @@
 
 * {
     font-family: 'Poor Story', cursive;
+    /*폰트 전체 설정*/
 }
 
 .main {
     background-color: #e5e5e5;
+    /*백그라운드의 색을 정한다.*/
     background-image: url("http://nstayimg4.speedgabia.com/arribada/main/mv01.jpg");
+    /*이미지 설정*/
 
 }
 
 .main-box {
     background-color: #F7BE81;
+    /*백그라운드의 색을 정한다.*/
     margin: 20px auto;
+    /*margin 속성은 테두리(border)와 이웃하는 요소 사이의 간격인 마진 영역의 크기를 설정*/
     max-width: 700px;
+    /*최대 너비 설정*/
     height: 100%;
-
+    /*높이 설정*/
     border-radius: 15px;
+    /*테두리 둥글게*/
 }
 
 .main-box > .register-box {
     transition: 0.3s;
+    /*애니메이션 속도 설정*/
     margin: auto;
+    /*margin 속성은 테두리(border)와 이웃하는 요소 사이의 간격인 마진 영역의 크기를 설정*/
     padding-top: 20px;
-
+    /*패딩영역의 위에 부분*/
     max-width: 500px;
+    /*최대 너비 설정*/
 }
 
 .main-box > .register-box > .buttons {
     display: flex;
+    /*display 속성은 웹 페이지의 레이아웃(layout)을 결정하는 CSS의 중요한 속성 중 하나*/
     justify-content: center;
-
+    /*가로축 * 중심축*/
     margin-top: 10px;
+    /*마진영역의 위에 부분*/
 }
 
 .main-box > .register-box > .mascot {
     width: 100%;
+    /*높이 설정*/
     border-radius: 55px;
+    /*테두리 둥글게*/
     padding: 40px;
+    /*padding 속성은 내용(content)과 테두리(border) 사이의 간격인 패딩 영역의 크기*/
 }
 
 .main-box > .register-box > .buttons > button {
     margin: 10px 10px 40px 10px;
+    /*margin 속성은 테두리(border)와 이웃하는 요소 사이의 간격인 마진 영역의 크기를 설정*/
 }
 
 @media screen and (max-width: 800px) {
     .main-box {
         max-width: 90%;
+        /*최대 너비 설정*/
     }
 
     .main-box > .register-box {
         max-width: 80%;
+        /*최대 너비 설정*/
     }
 }
 
 @media screen and (max-width: 600px) {
     .main-box {
         max-width: 90%;
+        /*최대 너비 설정*/
     }
 
     .main-box > .register-box {
         max-width: 80%;
+        /*최대 너비 설정*/
     }
 }
