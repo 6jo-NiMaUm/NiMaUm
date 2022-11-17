@@ -340,7 +340,6 @@ def listen():
                 info[i][key] = update_count                                                                                             # info에 들어있는 값을 갱신
 
                 return result, info
-
         return                                                                                                                          # for문 안의 return값을 함수 밖으로 그대로 return, info를 다시 return하는건 info가 갱신되어 for문 안에서 돌아야하기 때문
 
     info = list(db.info.find({}, {'_id': False}))                                                                                       # 이전 모든 데이터를 list형태로 저장
