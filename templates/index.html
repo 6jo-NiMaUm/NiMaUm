@@ -5,7 +5,7 @@
 <meta name="description" content="">
 <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 <meta name="generator" content="Hugo 0.84.0">
-<title>Album example · Bootstrap v5.0</title>
+<title>니가 마신 음료 "니마음"</title>
 
 <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/album/">
 
@@ -105,6 +105,11 @@
         font-size: 25px;
     }
 
+    .fw-light {
+        font-weight: 900;
+        font-size:100px;
+    }
+
 </style>
 <link rel="stylesheet" href="../static/css/index.css"/>
 </head>
@@ -123,7 +128,7 @@
                 <div class="col-sm-4 offset-md-1 py-4">
                     <h4 class="text-white">subscribe!</h4>
                     <ul class="list-unstyled">
-                        <li><a href="https://www.youtube.com/results?search_query=%EC%9D%8C%EB%A3%8C%EC%88%98+%EB%A8%B9%EB%B0%A9" class="text-white">구독과 좋아요~</a></li>
+                        <li><a href="https://www.youtube.com/results?search_query=%EC%9D%8C%EB%A3%8C%EC%88%98+%EB%A8%B9%EB%B0%A9" class="text-white" >구독과 좋아요~</a></li>
                         <li><a href="https://www.youtube.com/results?search_query=%EC%9D%8C%EB%A3%8C%EC%88%98+%EB%A8%B9%EB%B0%A9" class="text-white">follow me</a></li>
                     </ul>
                 </div>
@@ -155,14 +160,15 @@
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="myh1">니마음</h1>
-                <p class="lead text-muted">당신이 마시는 음료를 골라보세요~</p>
+                <h1 class="fw-light">니마음</h1>
+                <p>니가 마신 음료</p>
+                <p class="lead text-muted">당신이 마신 음료를 골라보세요~</p>
                 <div class="mylist">
                     <p>커피 <br>
                         <button type="button" onclick="count('coffee_count', this.id)" id="down_coffee"
                                 class="btn btn-outline-info"><
                         </button>
-                        <text id='coffee_count'>0</text>
+                        <text id='coffee_count' class="count-num">0</text>
                         <button type="button" onclick="count('coffee_count', this.id)" id="up_coffee="
                                 class="btn btn-outline-info">>
                         </button>
@@ -171,7 +177,7 @@
                         <button type="button" onclick="count('energy_count',this.id)" id="down_energy"
                                 class="btn btn-outline-info"><
                         </button>
-                        <text id='energy_count'> 0</text>
+                        <text id='energy_count' class="count-num"> 0</text>
                         <button type="button" onclick="count('energy_count',this.id)" id="up_energy"
                                 class="btn btn-outline-info">>
                         </button>
@@ -180,7 +186,7 @@
                         <button type="button" onclick="count('carbonic_count',this.id)" id="down_carbonic"
                                 class="btn btn-outline-info"><
                         </button>
-                        <text id='carbonic_count'> 0</text>
+                        <text id='carbonic_count' class="count-num"> 0</text>
                         <button type="button" onclick="count('carbonic_count',this.id)" id="up_carbonic"
                                 class="btn btn-outline-info">>
                         </button>
@@ -189,7 +195,7 @@
                         <button type="button" onclick="count('drink_count',this.id)" id="down_drink"
                                 class="btn btn-outline-info"><
                         </button>
-                        <text id='drink_count'> 0</text>
+                        <text id='drink_count' class="count-num"> 0</text>
                         <button type="button" onclick="count('drink_count',this.id)" id="up_drink"
                                 class="btn btn-outline-info">>
                         </button>
@@ -198,7 +204,7 @@
                         <button type="button" onclick="count('etc_count',this.id)" id="down_etc"
                                 class="btn btn-outline-info"><
                         </button>
-                        <text id='etc_count'> 0</text>
+                        <text id='etc_count' class="count-num"> 0</text>
                         <button type="button" onclick="count('etc_count',this.id)" id="up_etc"
                                 class="btn btn-outline-info">>
                         </button>
@@ -211,7 +217,9 @@
             </div>
         </div>
     </section>
-
+    <div class="rank-comment">
+        🔥🔥 실시간으로 카운트를 확인해 보세요 !!! 🔥🔥
+    </div>
     <div class="fixed" id="massage_box">
         <div class="message">
             <form id="m_box"></form>

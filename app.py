@@ -120,13 +120,6 @@ def api_register():
         return jsonify({'result': 'fail', 'msg': '양식에 맞게 입력해 주세요.'})
 
 
-# var reg = "^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$";
-# var txt = "aaaa";
-# if( !reg.test(txt) ) {
-#     alert("비밀번호 정규식 규칙 위반!!");
-#     return false;
-# }
-
 # 정규식 참고 링크 https://wikidocs.net/4308
 
 # [로그인 API]
@@ -263,6 +256,7 @@ def api_count():
     return jsonify({'msg': "성공"})
 
 
+# DB변화를 감지하여 변한 데이터에 대한 값을 화면에 전달 하는 함수로 SSE (Server Sent Event) 기능을 한다.
 @app.route("/listen")
 def listen():
     def respond_to_client(info):
@@ -274,39 +268,59 @@ def listen():
                 docu_updates = docu['updateDescription']['updatedFields']
                 for Key in docu_updates:
                     if Key == 'coffee_count':
-                        count, info = find_id(docu['fullDocument']['id'],info, docu_updates[Key], Key)
-                        now = str(docu_updates[Key] - count)
-                        message += "커피 " + now + "잔 추가해 총" + str(docu_updates['coffee_count']) + "잔\n"
+                        count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
+                        now = docu_updates[Key] - count
+                        if docu_updates[Key] - count < 0:
+                            message += "커피 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['coffee_count']) + "잔\n"
+                        else:
+                            message += "커피 " + str(now) + "잔 추가해 총 " + str(docu_updates['coffee_count']) + "잔\n"
                     elif Key == 'energy_count':
                         count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
-                        now = str(docu_updates[Key] - count)
-                        message += "에너지 드링크 " + now + "잔 추가해 총 " + str(docu_updates['energy_count']) + "잔\n"
+                        now = docu_updates[Key] - count
+                        if docu_updates[Key] - count < 0:
+                            message += "에너지 드링크 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['energy_count']) + "잔\n"
+                        else:
+                            message += "에너지 드링크 " + str(now) + "잔 추가해 총 " + str(docu_updates['energy_count']) + "잔\n"
                     elif Key == 'carbon_count':
-                        count, info = find_id(docu['fullDocument']['id'],info, docu_updates[Key], Key)
-                        now = str(docu_updates[Key] - count)
-                        message += "탄산음료 " + now + "잔 추가해 총 " + str(docu_updates['carbon_count']) + "잔\n"
+                        count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
+                        now = docu_updates[Key] - count
+                        if docu_updates[Key] - count < 0:
+                            message += "탄산음료 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['carbon_count']) + "잔\n"
+                        else:
+                            message += "탄산음료 " + str(now) + "잔 추가해 총 " + str(docu_updates['carbon_count']) + "잔\n"
                     elif Key == 'drink_count':
-                        count, info = find_id(docu['fullDocument']['id'],info, docu_updates[Key], Key)
-                        now = str(docu_updates[Key] - count)
-                        message += "술 " + now + "잔 추가해 총 " + str(docu_updates['drink_count']) + "잔\n"
+                        count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
+                        now = docu_updates[Key] - count
+                        if docu_updates[Key] - count < 0:
+                            message += "술 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['drink_count']) + "잔\n"
+                        else:
+                            message += "술 " + str(now) + "잔 추가해 총 " + str(docu_updates['drink_count']) + "잔\n"
                     elif Key == 'etc_count':
-                        count, info = find_id(docu['fullDocument']['id'],info, docu_updates[Key], Key)
-                        now = str(docu_updates[Key] - count)
-                        message += "기타음료 " + now + "잔 추가해 총 " + str(docu_updates['etc_count']) + "잔\n"
+                        count, info = find_id(docu['fullDocument']['id'], info, docu_updates[Key], Key)
+                        now = docu_updates[Key] - count
+                        if docu_updates[Key] - count < 0:
+                            message += "기타음료 " + str(-now) + "잔을 쏟아서 총 " + str(docu_updates['etc_count']) + "잔\n"
+                        else:
+                            message += "기타음료 " + str(now) + "잔 추가해 총 " + str(docu_updates['etc_count']) + "잔\n"
 
             elif docu['operationType'] == "insert":
                 docu_insert = docu['fullDocument']
                 for Key in docu_insert:
                     if Key == 'coffee_count' and docu_insert['coffee_count'] != 0:
-                        message += "커피 " + str(docu_insert['coffee_count']) + "잔 "
+                        message += "커피 " + str(docu_insert['coffee_count']) + "잔 추가해 총 " + str(
+                            docu_insert['coffee_count']) + "잔\n"
                     elif Key == 'energy_count' and docu_insert['energy_count'] != 0:
-                        message += "에너지 드링크 " + str(docu_insert['energy_count']) + "잔 "
+                        message += "에너지 드링크 " + str(docu_insert['energy_count']) + "잔 추가해 총 " + str(
+                            docu_insert['energy_count']) + "잔\n"
                     elif Key == 'carbon_count' and docu_insert['carbon_count'] != 0:
-                        message += "탄산음료 " + str(docu_insert['carbon_count']) + "잔 "
+                        message += "탄산음료 " + str(docu_insert['carbon_count']) + "잔 추가해 총 " + str(
+                            docu_insert['carbon_count']) + "잔\n"
                     elif Key == 'drink_count' and docu_insert['drink_count'] != 0:
-                        message += "술 " + str(docu_insert['drink_count']) + "잔 "
+                        message += "술 " + str(docu_insert['drink_count']) + "잔 추가해 총 " + str(
+                            docu_insert['drink_count']) + "잔\n"
                     elif Key == 'etc_count' and docu_insert['etc_count'] != 0:
-                        message += "기타음료 " + str(docu_insert['etc_count']) + "잔 "
+                        message += "기타음료 " + str(docu_insert['etc_count']) + "잔 추가해 총 " + str(
+                            docu_insert['etc_count']) + "잔\n"
 
             _data = json.dumps({
                 "nick": docu['fullDocument']['nick'],
@@ -323,10 +337,7 @@ def listen():
                 return result, info
 
         return
-
-
     info = list(db.info.find({}, {'_id': False}))
-    print(info)
     return Response(respond_to_client(info), mimetype='text/event-stream')
 
 
