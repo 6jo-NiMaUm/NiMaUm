@@ -11,6 +11,7 @@ import json
 import jwt
 import re
 import hashlib
+from operator import itemgetter
 
 
 app = Flask(__name__)
@@ -169,40 +170,55 @@ def api_show():
 
     dt = datetime.datetime.today().strftime("%Y%m%d%H%M%S")[0:8]
 
-    info_list = list(db.info.find({'id': userinfo['id'], 'dt': {"$gte":update_dt, "$lte": str(int(update_dt) + 6)}}, {'_id': False}).sort('coffee_count', -1))
-    coffee_rank = list(db.info.find({'dt': {"$gte":update_dt, "$lte": str(int(update_dt) + 6)}}, {'_id': False}, ).sort('coffee_count', -1))
-    energy_rank = list(db.info.find({'dt': {"$gte":update_dt, "$lte": str(int(update_dt) + 6)}}, {'_id': False}).sort('energy_count', -1))
-    drink_rank = list(db.info.find({'dt': {"$gte":update_dt, "$lte": str(int(update_dt) + 6)}}, {'_id': False}).sort('drink_count', -1))
-    carbon_rank = list(db.info.find({'dt': {"$gte":update_dt, "$lte": str(int(update_dt) + 6)}}, {'_id': False}).sort('carbon_count', -1))
-    etc_rank = list(db.info.find({'dt': {"$gte":update_dt, "$lte": str(int(update_dt) + 6)}}, {'_id': False}).sort('etc_count', -1))
+    # 기간별 데이터 추출
+    info_list = list(db.info.find({'id': userinfo['id'], 'dt': {"$gte": update_dt, "$lte": str(int(update_dt) + 6)}},
+                                  {'_id': False}).sort('coffee_count', -1))
+    merge_count = list(db.info.aggregate([{'$group': {'_id': {'id': '$id', 'nick': '$nick'},
+                                                      'coffee_count': {'$sum': '$coffee_count'},
+                                                      'energy_count': {'$sum': '$energy_count'},
+                                                      'drink_count': {'$sum': '$drink_count'},
+                                                      'carbon_count': {'$sum': '$carbon_count'},
+                                                      'etc_count': {'$sum': '$etc_count'}
+                                                      }}]))
+
+    coffee_rank = sorted(merge_count, key=itemgetter('coffee_count'), reverse=True)
+    energy_rank = sorted(merge_count, key=itemgetter('energy_count'), reverse=True)
+    drink_rank = sorted(merge_count, key=itemgetter('drink_count'), reverse=True)
+    carbon_rank = sorted(merge_count, key=itemgetter('carbon_count'), reverse=True)
+    etc_rank = sorted(merge_count, key=itemgetter('etc_count'), reverse=True)
 
     # coffee energy carbon drink etc
     my_rank = [0 for i in range(5)]
 
     for i in range(len(coffee_rank)):
-        for k, v in coffee_rank[i].items():
-            if v == userinfo['id']:
-                my_rank[0] = i + 1
+        userid = coffee_rank[i]['_id']['id']
+
+        if userid == userinfo['id']:
+            my_rank[0] = i + 1
 
     for i in range(len(energy_rank)):
-        for k, v in energy_rank[i].items():
-            if v == userinfo['id']:
-                my_rank[1] = i + 1
+        userid = energy_rank[i]['_id']['id']
+
+        if userid == userinfo['id']:
+            my_rank[1] = i + 1
 
     for i in range(len(carbon_rank)):
-        for k, v in carbon_rank[i].items():
-            if v == userinfo['id']:
-                my_rank[2] = i + 1
+        userid = carbon_rank[i]['_id']['id']
+
+        if userid == userinfo['id']:
+            my_rank[2] = i + 1
 
     for i in range(len(drink_rank)):
-        for k, v in drink_rank[i].items():
-            if v == userinfo['id']:
-                my_rank[3] = i + 1
+        userid = drink_rank[i]['_id']['id']
+
+        if userid == userinfo['id']:
+            my_rank[3] = i + 1
 
     for i in range(len(etc_rank)):
-        for k, v in etc_rank[i].items():
-            if v == userinfo['id']:
-                my_rank[4] = i + 1
+        userid = etc_rank[i]['_id']['id']
+
+        if userid == userinfo['id']:
+            my_rank[4] = i + 1
 
     return jsonify({
         'info': info_list,
@@ -256,14 +272,18 @@ def api_count():
 # 1. 기능 : DB변화를 감지하여 변한 데이터에 대한 값을 화면에 전달 하는 함수로 SSE (Server Sent Event) 기능을 한다.
 # 2. 작성자 : 6조 조소영
 # 3. 작성일자 : 2022-11-15
-# 4. 수정사항 : - operation 별 처리와 출력 Key값 변화에 따른 처리 적용 (2022-11-16 by.소영)
-#              - 이전 값과 변화 값의 비교 함수 (2022-11-16 by.지성)
+# 4. 수정사항 : - operation 별 처리와 출력 Key값 변화에 따른 처리 적용 (2022-11-16 by.조소영)
+#              - 이전 값과 변화 값의 비교 함수 (2022-11-16 by.황지성)
 # 5. 수정일자 : 2022-11-17
 @app.route("/listen")
 def listen():
+
     def respond_to_client(info):
+
+        #1. DB변화 감지 스트림 생성
         stream = db.info.watch(full_document="updateLookup", full_document_before_change="whenAvailable")                               # 몽고DB의 특정 collection을 지켜보는 함수 (full_document_before_change옵션은 변경 Key값만을 알려주는 옵션)
 
+        #2. 스트림을 유지 및 DB변화
         for docu in stream:                                                                                                             # Stream을 유지하며 DB의 변경을 감지하기 위해 계속 도는 for문
             message = "";                                                                                                               # 화면단에서 출력할 메세지를 담는 변수
             if docu['operationType'] == 'update':                                                                                       # 기존값 업데이트와 첫 값 입력시 처리를 나눔
@@ -324,7 +344,7 @@ def listen():
                         message += "기타음료 " + str(docu_insert['etc_count']) + "잔 추가해 총 " + str(
                             docu_insert['etc_count']) + "잔\n"
 
-
+            #3.
             _data = json.dumps({                                                                                                        # 화면으로 보낼 데이터를 json 형태로 저장
                 "nick": docu['fullDocument']['nick'],
                 "comment": message
@@ -332,14 +352,14 @@ def listen():
             yield f"id: 1\ndata: {_data}\nevent: online\n\n"                                                                            # yield는 for문이 돌면서 중간중간 변경 값을 출력한 값을 하나하나 전달 하기 위한 제네레이터를 생성하는 기능을 한다
                                                                                                                                         # f""는 f-string 문자열 사이에 변수를 사용할 수 있도록 하는 문법
 
-    # DB의 이전값을 가져오는 함수
+    # DB의 이전 값을 가져오는 함수
     def find_id(id, info, update_count, key):                                                                                           # 이전 데이터 모두를 대상으로 for문을 돌려
         for i in range(len(info)):
             if info[i]['id'] == id:                                                                                                     # 해당 아이디를 찾는다
                 result = info[i][key]                                                                                                   # 이전 값을 return할 변수에 대입
                 info[i][key] = update_count                                                                                             # info에 들어있는 값을 갱신
-
                 return result, info
+
         return                                                                                                                          # for문 안의 return값을 함수 밖으로 그대로 return, info를 다시 return하는건 info가 갱신되어 for문 안에서 돌아야하기 때문
 
     info = list(db.info.find({}, {'_id': False}))                                                                                       # 이전 모든 데이터를 list형태로 저장
