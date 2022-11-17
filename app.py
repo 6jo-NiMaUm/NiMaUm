@@ -253,8 +253,12 @@ def api_count():
 
     return jsonify({'msg': "성공"})
 
-
-# DB변화를 감지하여 변한 데이터에 대한 값을 화면에 전달 하는 함수로 SSE (Server Sent Event) 기능을 한다.
+# 1. 기능 : DB변화를 감지하여 변한 데이터에 대한 값을 화면에 전달 하는 함수로 SSE (Server Sent Event) 기능을 한다.
+# 2. 작성자 : 6조 조소영
+# 3. 작성일자 : 2022-11-15
+# 4. 수정사항 : - operation 별 처리와 출력 Key값 변화에 따른 처리 적용 (2022-11-16 by.소영)
+#              - 이전 값과 변화 값의 비교 함수 (2022-11-16 by.지성)
+# 5. 수정일자 : 2022-11-17
 @app.route("/listen")
 def listen():
     def respond_to_client(info):
