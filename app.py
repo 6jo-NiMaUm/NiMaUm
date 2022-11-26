@@ -17,7 +17,7 @@ from operator import itemgetter
 app = Flask(__name__)
 
 ca = certifi.where()
-client = MongoClient('mongodb+srv://test:sparta@cluster0.s1j14s9.mongodb.net/Cluster0?retryWrites=true&w=majority',
+client = MongoClient('몽고DB계정 및 애플리케이션 연결',
                      tlsCAFile=ca)
 db = client.dbsparta
 
